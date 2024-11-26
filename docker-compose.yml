@@ -1,0 +1,14 @@
+services:
+  frontend:
+    container_name: frontend
+    image: node:23.3
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    working_dir: /usr/src/app
+    ports:
+      - 5173:5173
+    command: bash -c "npm install && npm run dev -- --host 0.0.0.0"
+
+volumes:
+  node_modules:
