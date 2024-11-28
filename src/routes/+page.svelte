@@ -18,50 +18,48 @@
         }).addTo(map);
 
         // Load addresses
-        const addresses = [
-            {
-                name: 'Wynkel',
-                address: 'Botterlaan 39',
-                city: 'Kortgene'
-            },
-            {
-                name: 'Wynkel',
-                address: 'Sint Janskerke 4A',
-                city: 'Zoutelande'
-            },
-            {
-                name: 'Wynkel',
-                address: 'Kruitmolenlaan 9',
-                city: 'Middelburg'
-            },
-        ];
+        /**
+         * @type {any[]}
+         */
+        const shops = [];
+        await fetch(`http://localhost:3010/markets/markets`).then(res => {
+            return res.json();
+        }).then(json => {
+            for (let i = 0; i < json.length; i++) {
+                const shop = json[i];
+                const location = shop.location;
+                location.name = shop.name;
+                location.description = shop.description;
+                console.log(location);
+                shops.push(location);
+            }
+        })
 
         const points = [];
-        for (let i = 0; i < addresses.length; i++) {
-            const address = addresses[i];
+        for (let i = 0; i < shops.length; i++) {
+            const shop = shops[i];
             let lat = null;
             let lng = null;
-            const response = await fetch(`https://nominatim.openstreetmap.org/search?street=${address.address}&city=${address.city}&format=jsonv2`).then(res => {
+            const response = await fetch(`https://nominatim.openstreetmap.org/search?street=${shop.address}&city=${shop.city}&format=jsonv2`).then(res => {
                 return res.json();
             }).then(json => {
-                console.log(json);
                 lat = json[0].lat;
                 lng = json[0].lon;
-                console.log(`${lat} ${lng}`)
             }).catch(error => {
                 console.error(error);
             });
 
             console.log(`Found latlng ${lat} ${lng}`);
             points.push({
-                name: address.name,
+                name: shop.name,
+                description: shop.description,
                 lat: lat,
                 lng: lng,
             });
         }
         points.forEach(point => {
             // Add a marker
-            L.marker([point.lat, point.lng]).addTo(map).bindPopup(point.name);
+            L.marker([point.lat, point.lng]).addTo(map).bindPopup(`${point.name}<br>${point.description}`);
         });
 
         const loadImg = document.getElementById('loading');
