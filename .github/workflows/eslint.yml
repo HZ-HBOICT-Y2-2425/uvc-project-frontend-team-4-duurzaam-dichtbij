@@ -1,17 +1,16 @@
-name: Frontend Deployment Pipeline
+name: Frontend Code Quality and Unit Tests
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
 
 jobs:
-  build-and-deploy:
+  lint-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      # Stap 1: Checkout de repository
+      # Checkout de repository
       - name: Checkout Code
         uses: actions/checkout@v4
 
@@ -19,9 +18,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '22.11.0'
 
-      # Installeer dependencies
+      # Installeer frontend dependencies
       - name: Install Dependencies
         run: |
           npm install
@@ -64,22 +63,6 @@ jobs:
           fi
 
       # Run Unit Tests
-      #- name: Run Unit Tests
-      #  run: |
+    #  - name: Run Unit Tests
+     #   run: |
       #    npm test
-
-      # Build de frontend
-      - name: Build Frontend Application
-        run: |
-          npm run build
-
-      # Docker setup
-      - name: Docker Compose setup
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-      # Deploy met Docker
-      - name: Build and Run Frontend with Docker Compose
-        run: |
-          docker-compose -f docker-compose.yml build
-          docker-compose -f docker-compose.yml up -d
