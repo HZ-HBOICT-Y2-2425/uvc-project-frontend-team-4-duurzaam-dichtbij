@@ -1,17 +1,16 @@
-name: Frontend Deployment Pipeline
+name: Frontend Code Quality and Unit Tests
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
 
 jobs:
-  build-and-deploy:
+  lint-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      # Stap 1: Checkout de repository
+      # Checkout de repository
       - name: Checkout Code
         uses: actions/checkout@v4
 
@@ -21,7 +20,7 @@ jobs:
         with:
           node-version: '18.x'
 
-      # Installeer dependencies
+      # Installeer frontend dependencies
       - name: Install Dependencies
         run: |
           cd frontend
@@ -38,16 +37,3 @@ jobs:
         run: |
           cd frontend
           npm test
-
-      # Build de frontend
-      - name: Build Frontend Application
-        run: |
-          cd frontend
-          npm run build
-
-      # Deploy met Docker
-      - name: Build and Run Frontend with Docker Compose
-        run: |
-          cd frontend
-          docker-compose -f docker-compose.yml build
-          docker-compose -f docker-compose.yml up -d
