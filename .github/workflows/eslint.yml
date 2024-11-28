@@ -1,0 +1,30 @@
+name: ESLint for Frontend
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      # Install Dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # Run ESLint
+      - name: Run ESLint
+        run: |
+          npx eslint . --ext .js,.svelte || exit 1
