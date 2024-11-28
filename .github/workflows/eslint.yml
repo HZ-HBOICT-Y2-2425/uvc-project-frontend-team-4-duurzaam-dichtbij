@@ -23,17 +23,14 @@ jobs:
       # Installeer frontend dependencies
       - name: Install Dependencies
         run: |
-          cd frontend
           npm install
 
       # Run Linter
       - name: Run ESLint
         run: |
-          cd frontend
           npx eslint . --ext .js,.svelte || exit 1
 
       # Run Unit Tests
       - name: Run Unit Tests
         run: |
-          cd frontend
           npm test

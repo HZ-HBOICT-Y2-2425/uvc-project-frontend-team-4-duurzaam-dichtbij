@@ -24,30 +24,25 @@ jobs:
       # Installeer dependencies
       - name: Install Dependencies
         run: |
-          cd frontend
           npm install
 
       # Run Linter
       - name: Run ESLint
         run: |
-          cd frontend
           npx eslint . --ext .js,.svelte || exit 1
 
       # Run Unit Tests
       - name: Run Unit Tests
         run: |
-          cd frontend
           npm test
 
       # Build de frontend
       - name: Build Frontend Application
         run: |
-          cd frontend
           npm run build
 
       # Deploy met Docker
       - name: Build and Run Frontend with Docker Compose
         run: |
-          cd frontend
           docker-compose -f docker-compose.yml build
           docker-compose -f docker-compose.yml up -d
