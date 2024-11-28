@@ -3,4 +3,4 @@ import { defineConfig } from 'vite';
 
 export default {
   plugins: [sveltekit()],
-};
+}
