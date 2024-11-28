@@ -4,6 +4,7 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
+        branches: [ "main" ]
 
 jobs:
   lint-and-test:
@@ -18,7 +19,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.11.0'
+          node-version: 22.11.0
 
       # Installeer frontend dependencies
       - name: Install Dependencies
