@@ -1,12 +1,10 @@
-import eslintRecommended from 'eslint/conf/eslint-recommended.js';
-
-export default [
-  eslintRecommended,
-  {
-    files: ['*.js', '*.svelte'],
-    rules: {
-      semi: 'error',
-      'prefer-const': 'error',
+module.exports = [
+    require('eslint/conf/eslint-recommended.js'),
+    {
+      files: ['*.js', '*.svelte'],
+      rules: {
+        semi: 'error',
+        'prefer-const': 'error',
+      },
     },
-  },
-];
+  ];
