@@ -1,22 +1,6 @@
 <script>
-    import { onMount } from 'svelte'; // Verkeerde import die niet gebruikt wordt
+    import { onMount } from 'svelte'; // Verkeerde import, wordt niet gebruikt
+    let unusedVar = 'I am not used';
     
-    let message = "Hello, world!";
-  
-    onMount(() => {
-      console.log("Component is mounted!");
-    });
-  
-    // Onbedoelde fout: variabele wordt niet gedefinieerd
-    const greetingMessage = sayHello(message); // Er is geen functie `sayHello`
+    let message = "Hello, world!"
   </script>
-  
-  <main>
-    <h1>{message}</h1>
-  </main>
-  
-  <style>
-    h1 {
-      color: red; /* Hardcoded kleur die als waarschuwing zou kunnen verschijnen */
-    }
-  </style>
