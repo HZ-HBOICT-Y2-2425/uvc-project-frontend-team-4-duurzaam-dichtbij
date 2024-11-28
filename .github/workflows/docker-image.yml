@@ -73,6 +73,11 @@ jobs:
         run: |
           npm run build
 
+      # Docker setup
+      - name: Docker Compose setup
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
       # Deploy met Docker
       - name: Build and Run Frontend with Docker Compose
         run: |

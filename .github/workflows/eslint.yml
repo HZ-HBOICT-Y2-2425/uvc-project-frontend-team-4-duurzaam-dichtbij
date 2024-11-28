@@ -28,7 +28,6 @@ jobs:
       # Run Linter
       - name: Run ESLint
         run: |
-          run: |
           # Initialize a flag to track errors
           lint_failed=0
 
