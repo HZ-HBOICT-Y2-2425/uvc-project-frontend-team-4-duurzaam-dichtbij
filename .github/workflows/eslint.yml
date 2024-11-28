@@ -28,7 +28,7 @@ jobs:
       # Run Linter
       - name: Run ESLint
         run: |
-          npx eslint . || exit 1
+          npx eslint . --ext .js,.svelte || exit 1
 
       # Run Unit Tests
       - name: Run Unit Tests
