@@ -32,11 +32,13 @@ jobs:
             cat <<EOF > eslint.config.js
           export default [
             {
-              files: ["**/*.svelte", "**/*.ts", "**/*.js"]
+              files: ["**/*.svelte", "**/*.ts", "**/*.js"],
               rules: {
-              semi: ["error", "always"],
-              "prefer-const": "error"
-          }
+                semi: ["error", "always"],
+                "prefer-const": "error"
+              },
+              ignorePatterns: ["node_modules/", ".svelte-kit/"],
+            }
           ]
           EOF
           else

@@ -4,6 +4,7 @@ export default [
       rules: {
           "semi": ["error", "always"],
           "prefer-const": "error"
-      }
+      },
+      ignorePatterns: ["node_modules/", ".svelte-kit/"],
   }
 ];
