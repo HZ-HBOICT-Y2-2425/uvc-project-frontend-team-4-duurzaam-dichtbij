@@ -26,20 +26,22 @@ jobs:
           npm install
 
       # Run Linter
-      - name: Check for ESLint configuration
+      - name: Check if eslint.config.js exists, if not create a default configuration
         run: |
-          # Check if eslint.config.js exists, if not create a default configuration
+          # Controleer of eslint.config.js bestaat
           if [ ! -f eslint.config.js ]; then
+            echo "Creating default ESLint configuration..."
             echo 'export default [
               {
-                rules: {
-                  semi: "error",
-                  "prefer-const": "error",
-                  "no-unused-vars": "warn",
-                  "no-console": "warn"
-                }
+                  files: ["**/*.svelte", "**/*.js"],
+                  rules: {
+                      semi: ["error", "always"],
+                      "prefer-const": "error"
+                  }
               }
             ];' > eslint.config.js
+          else
+            echo "eslint.config.js already exists."
           fi
 
           - name: Run ESLint
