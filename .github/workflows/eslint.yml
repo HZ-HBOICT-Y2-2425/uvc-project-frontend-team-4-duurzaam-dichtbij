@@ -44,15 +44,15 @@ jobs:
           echo "eslint.config.js already exists."
           fi
         
-        # Install ESLint
-        - name: Install ESLint
-        run: |
-          npm install eslint --save-dev
+      # Install ESLint
+      - name: Install ESLint
+      run: |
+        npm install eslint --save-dev
 
-        # Run ESLint
-        - name: Run ESLint
-          run: |
-            npx eslint .
+      # Run ESLint
+      - name: Run ESLint
+        run: |
+          npx eslint .
 
       # Run Unit Tests
     #  - name: Run Unit Tests
