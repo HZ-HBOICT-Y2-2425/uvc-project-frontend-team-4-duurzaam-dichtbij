@@ -45,7 +45,7 @@ jobs:
       - name: Run ESLint
         run: |
           # Run ESLint on the project
-          npx eslint src -c .js,.svelte --max-warnings=0
+          npx eslint src -c --max-warnings=0
 
       # Run Unit Tests
     #  - name: Run Unit Tests
