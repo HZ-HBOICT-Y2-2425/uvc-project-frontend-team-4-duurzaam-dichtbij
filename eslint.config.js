@@ -5,6 +5,6 @@ export default [
           "semi": ["error", "always"],
           "prefer-const": "error"
       },
-      ignores: ["node_modules/", ".svelte-kit/"],
+      ignores: ["node_modules/**", ".svelte-kit/**"],
   }
 ];
