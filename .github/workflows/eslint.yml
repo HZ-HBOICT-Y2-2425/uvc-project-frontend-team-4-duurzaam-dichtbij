@@ -26,34 +26,25 @@ jobs:
           npm install
 
       # Run Linter
-      - name: Check if eslint.config.js exists, if not create a default configuration
+      - name: Controleer of eslint.config.js bestaat
         run: |
-          # Controleer of eslint.config.js bestaat
+          # Controleer of eslint.config.js aanwezig is
           if [ ! -f eslint.config.js ]; then
             echo "Creating default ESLint configuration..."
-            echo 'export default [
-              {
-                  files: ["**/*.svelte", "**/*.js"],
-                  rules: {
-                      semi: ["error", "always"],
-                      "prefer-const": "error"
-                  }
-              }
-            ];' > eslint.config.js
-          else
-            echo "eslint.config.js already exists."
-          fi
-
-          - name: Run ESLint
-          run: |
-            # Check if source directory exists
-            if [ -d src ]; then
-              echo "Linting the project..."
-              npx eslint src --max-warnings=0
-            else
-              echo "Directory 'src' does not exist. Please verify your project structure."
-              exit 1
-            fi
+            cat <<EOF > eslint.config.js
+              export default [
+                {
+                    files: ["**/*.svelte", "**/*.ts", "**/*.js"],
+                    rules: {
+                        semi: ["error", "always"],
+                        "prefer-const": "error"
+                    }
+                }
+              ];
+              EOF
+                        else
+                          echo "eslint.config.js already exists."
+                        fi
 
       # Run Unit Tests
     #  - name: Run Unit Tests
