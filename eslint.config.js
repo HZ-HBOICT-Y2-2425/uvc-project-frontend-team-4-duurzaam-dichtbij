@@ -1,8 +1,9 @@
-module.exports = {
-    files: ['*.js', '*.svelte'],
-    rules: {
-      semi: 'error',
-      'prefer-const': 'error',
-    },
-  };
-  
+export default [
+  {
+      files: ["**/*.svelte", "**/*.ts", "**/*.js"],
+      rules: {
+          "semi": ["error", "always"],
+          "prefer-const": "error"
+      }
+  }
+];

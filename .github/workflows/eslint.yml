@@ -42,10 +42,16 @@ jobs:
             ];' > eslint.config.js
           fi
 
-      - name: Run ESLint
-        run: |
-          # Run ESLint on the project
-          npx eslint src -c --max-warnings=0
+          - name: Run ESLint
+          run: |
+            # Check if source directory exists
+            if [ -d src ]; then
+              echo "Linting the project..."
+              npx eslint src --max-warnings=0
+            else
+              echo "Directory 'src' does not exist. Please verify your project structure."
+              exit 1
+            fi
 
       # Run Unit Tests
     #  - name: Run Unit Tests
