@@ -33,7 +33,7 @@
                 console.log(location);
                 shops.push(location);
             }
-        })
+        });
 
         const points = [];
         for (let i = 0; i < shops.length; i++) {

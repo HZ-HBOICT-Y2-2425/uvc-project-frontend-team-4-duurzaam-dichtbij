@@ -53,7 +53,7 @@ jobs:
       # Run ESLint
       - name: Run ESLint
         run: |
-          npx eslint .
+          npx eslint . --ignore-pattern ".svelte-kit/**" --ignore-pattern "node_modules/**" --ignore-pattern "src/app.d.ts"
 
       # Run Unit Tests
     #  - name: Run Unit Tests
