@@ -8,7 +8,6 @@ on:
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
-
     steps:
       # Checkout de repository
       - name: Checkout Code
@@ -26,41 +25,33 @@ jobs:
           npm install
 
       # Run Linter
+      - name: Controleer of eslint.config.js aanwezig is
+        run: |
+          if [ ! -f eslint.config.js ]; then
+            echo "Creating default ESLint configuration..."
+            cat <<EOF > eslint.config.js
+          export default [
+            {
+              files: ["**/*.svelte", "**/*.ts", "**/*.js"]
+              rules: {
+              semi: ["error", "always"],
+              "prefer-const": "error"
+          }
+          ]
+          EOF
+          else
+          echo "eslint.config.js already exists."
+          fi
+        
+      # Install ESLint
+      - name: Install ESLint
+        run: |
+          npm install eslint --save-dev
+
+      # Run ESLint
       - name: Run ESLint
         run: |
-          # Initialize a flag to track errors
-          lint_failed=0
-
-          # Find all 'code' directories containing package.json
-          for dir in $(find . -type d -name "code" -exec test -e {}/package.json \; -print); do
-            parent_dir=$(basename $(dirname $dir))
-            echo "Running ESLint in $parent_dir/code"
-            cd $dir
-            # Install dependencies
-            npm install
-            # Ensure ESLint is installed
-            npm install eslint --save-dev
-            # Generate a default ESLint configuration if missing
-            if [ ! -f eslint.config.js ]; then
-              echo 'export default [
-                        {
-                            rules: {
-                                semi: "error",
-                                "prefer-const": "error"
-                            }
-                        }
-                    ];' > eslint.config.js
-            fi
-            # Run ESLint and capture the exit code
-            npx eslint . || lint_failed=1
-            cd -
-          done
-
-          # Exit the workflow with an error if any linting failed
-          if [ $lint_failed -eq 1 ]; then
-            echo "ESLint found issues in one or more microservices. Please fix them."
-            exit 1
-          fi
+          npx eslint .
 
       # Run Unit Tests
     #  - name: Run Unit Tests
