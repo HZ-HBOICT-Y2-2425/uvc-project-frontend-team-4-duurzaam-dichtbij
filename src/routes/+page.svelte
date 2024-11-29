@@ -1,5 +1,6 @@
 <script>
-    import "../app.css";
+    import "../app.css"
+    let unusedVariable = "This is not used"
 </script>
 
 <h1 class="bg-lime-400">Welcome to SvelteKit</h1>
