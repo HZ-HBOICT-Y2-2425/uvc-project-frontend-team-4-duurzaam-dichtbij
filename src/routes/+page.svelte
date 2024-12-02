@@ -33,6 +33,9 @@
                 console.log(location);
                 shops.push(location);
             }
+        }).catch(error => {
+            console.error('Could not load markets: ');
+            console.log(error);
         });
 
         const points = [];
