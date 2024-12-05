@@ -92,7 +92,7 @@
                 const json = await res.json();
                 return { lat: json[0].lat, lng: json[0].lon };
             } catch (error) {
-                console.error("Geocoding error:", error);
+                console.error(`${address}, ${city} seems to be a fake address!`);
                 return null;
             }
         };
