@@ -22,16 +22,33 @@
          * @type {any[]}
          */
         const shops = [];
-        await fetch(`http://localhost:3010/markets/markets`).then(res => {
+        await fetch(`http://localhost:3010/shops/shops`).then(res => {
             return res.json();
         }).then(json => {
             for (let i = 0; i < json.length; i++) {
                 const shop = json[i];
-                const location = shop.location;
-                location.name = shop.name;
-                location.description = shop.description;
-                console.log(location);
-                shops.push(location);
+                const address = shop.address;
+                address.name = shop.name;
+                shops.push(address);
+            }
+        }).catch(error => {
+            console.error('Could not load shops: ');
+            console.log(error);
+        });
+
+        /**
+         * @type {any[]}
+         */
+        const markets = [];
+        await fetch(`http://localhost:3010/markets/markets`).then(res => {
+            return res.json();
+        }).then(json => {
+            for (let i = 0; i < json.length; i++) {
+                const market = json[i];
+                const location = market.location;
+                location.name = market.name;
+                location.description = market.description;
+                markets.push(location);
             }
         }).catch(error => {
             console.error('Could not load markets: ');
@@ -52,17 +69,45 @@
                 console.error(error);
             });
 
-            console.log(`Found latlng ${lat} ${lng}`);
             points.push({
-                name: shop.name,
-                description: shop.description,
+                popup: `${shop.name}`,
+                icon: 'shop_icon.png',
                 lat: lat,
                 lng: lng,
             });
         }
+        for (let i = 0; i < markets.length; i++) {
+            const market = markets[i];
+            let lat = null;
+            let lng = null;
+            const response = await fetch(`https://nominatim.openstreetmap.org/search?street=${market.address}&city=${market.city}&format=jsonv2`).then(res => {
+                return res.json();
+            }).then(json => {
+                lat = json[0].lat;
+                lng = json[0].lon;
+            }).catch(error => {
+                console.error(error);
+            });
+
+            points.push({
+                popup: `${market.name}<br>${market.description}`,
+                icon: 'market_icon.png',
+                lat: lat,
+                lng: lng,
+            });
+        }
+
         points.forEach(point => {
+            const icon = L.icon({
+                // @ts-ignore
+                iconUrl: point.icon,
+                iconSize: [40, 40],       // Size of the scaled-down icon
+                iconAnchor: [20, 40],     // Center-bottom alignment
+                popupAnchor: [0, -40]     // Popup opens directly above the icon
+            });
             // Add a marker
-            L.marker([point.lat, point.lng]).addTo(map).bindPopup(`${point.name}<br>${point.description}`);
+            L.marker([point.lat, point.lng], { icon: icon }) // Use the custom icon
+                .addTo(map).bindPopup(point.popup);
         });
 
         const loadImg = document.getElementById('loading');
