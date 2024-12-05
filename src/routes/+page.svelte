@@ -8,6 +8,7 @@
     const points = [];
     let currentMarkers = [];
     let searchQuery = '';
+    let userMarker = null;
     
     let map;
     
@@ -28,6 +29,9 @@
             attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         }).addTo(map);
     
+        // Get user's location
+        getUserLocation();
+
         // Fetch shop and market data
         const shops = await fetchShops();
         const markets = await fetchMarkets();
@@ -37,7 +41,7 @@
     
         // Display the points on the map
         updateMap();
-    
+
         // Hide loading image if applicable
         const loadImg = document.getElementById("loading");
         if (loadImg) {
@@ -140,6 +144,42 @@
                 marker.addTo(map).bindPopup(point.popup);
             });
     }
+
+    // Get user's current location
+    function getUserLocation() {
+        if (!navigator.geolocation) {
+            console.error("Geolocation is not supported by this browser.");
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                const { latitude, longitude } = position.coords;
+
+                // Add a marker for the user's location
+                const userIcon = L.icon({
+                    iconUrl: "user_icon.png", // Replace with your user marker icon path
+                    iconSize: [40, 40],
+                    iconAnchor: [20, 40],
+                    popupAnchor: [0, -40],
+                });
+
+                if (userMarker) {
+                    map.removeLayer(userMarker);
+                }
+
+                userMarker = L.marker([latitude, longitude], { icon: userIcon });
+                userMarker.addTo(map).bindPopup("You are here.");
+
+                // Center the map on the user's location
+                map.setView([latitude, longitude], 12);
+            },
+            error => {
+                console.error("Could not get user location:", error);
+            }
+        );
+    }
+
 
     function handleSearch() {
         if (L === null) {
