@@ -36,7 +36,7 @@
             console.error(`Error fetching shop with id ${id}:`, err);
             shop = null; // Graceful fallback
         }
-    }
+    };
 </script>
 
 <main>
