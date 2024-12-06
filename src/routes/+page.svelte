@@ -6,6 +6,7 @@
      * @type {{ on: (arg0: string, arg1: (e: { latlng: any; }) => void) => void; }}
      */
     let map;
+
     onMount(async () => {
         const L = await import("leaflet");
 
@@ -21,29 +22,49 @@
         /**
          * @type {any[]}
          */
-        const shops = [];
+        const mapItems = [];
         await fetch(`http://localhost:3010/markets/markets`).then(res => {
             return res.json();
         }).then(json => {
             for (let i = 0; i < json.length; i++) {
-                const shop = json[i];
-                const location = shop.location;
-                location.name = shop.name;
-                location.description = shop.description;
+                const market = json[i];
+                const location = market.location;
+                location.name = market.name;
+                location.description = market.description;
+                location.id = market.id;
+                location.type = 'market';
                 console.log(location);
-                shops.push(location);
+                mapItems.push(location);
             }
         }).catch(error => {
             console.error('Could not load markets: ');
             console.log(error);
         });
 
+        await fetch(`http://localhost:3010/shops/shops`).then(res => {
+            return res.json();
+        }).then(json => {
+            for (let i = 0; i < json.length; i++) {
+                const shop = json[i];
+                const location = shop.location;
+                location.name = shop.name;
+                location.description = shop.phoneNumber;
+                location.id = shop.id;
+                location.type = 'shop';
+                console.log(location);
+                mapItems.push(location);
+            }
+        }).catch(error => {
+            console.error('Could not load shops: ');
+            console.log(error);
+        });
+
         const points = [];
-        for (let i = 0; i < shops.length; i++) {
-            const shop = shops[i];
+        for (let i = 0; i < mapItems.length; i++) {
+            const item = mapItems[i];
             let lat = null;
             let lng = null;
-            const response = await fetch(`https://nominatim.openstreetmap.org/search?street=${shop.address}&city=${shop.city}&format=jsonv2`).then(res => {
+            const response = await fetch(`https://nominatim.openstreetmap.org/search?street=${item.address}&city=${item.city}&format=jsonv2`).then(res => {
                 return res.json();
             }).then(json => {
                 lat = json[0].lat;
@@ -54,15 +75,22 @@
 
             console.log(`Found latlng ${lat} ${lng}`);
             points.push({
-                name: shop.name,
-                description: shop.description,
+                id: item.id,
+                name: item.name,
+                description: item.description,
+                type: item.type,
                 lat: lat,
                 lng: lng,
             });
         }
+
         points.forEach(point => {
             // Add a marker
-            L.marker([point.lat, point.lng]).addTo(map).bindPopup(`${point.name}<br>${point.description}`);
+            if (point.type === 'market') {
+                L.marker([point.lat, point.lng]).addTo(map).bindPopup(`<b>${point.name}</b><br>${point.description}<br><a href="/markets/${point.id}">More info</a>`);
+            } else if (point.type === 'shop') {
+                L.marker([point.lat, point.lng]).addTo(map).bindPopup(`<b>${point.name}</b><br>${point.description}<br><a href="/shops/${point.id}">More info</a>`);
+            }
         });
 
         const loadImg = document.getElementById('loading');
