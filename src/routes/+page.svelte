@@ -9,7 +9,7 @@
     let currentMarkers = []; // all loaded markers
 
     let searchQuery = ''; // current search query
-    let products = []; // products that shops must sell to show
+    //let products = []; // products that shops must sell to show
     let maxDistance = undefined; // distance in km
     let showClosed = false; // closed shops are shown too
     let firstLoad = true; // Makes the showClosed opposite in updateMap() to fix issue
