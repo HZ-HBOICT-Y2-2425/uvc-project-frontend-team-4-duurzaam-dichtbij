@@ -1,5 +1,6 @@
 <script>
     import { onMount } from "svelte";
+    import "../app.css";
 
     let sidebarVisible = false; // Sidebar visibility state
     let menubarVisible = false; // Menubar visibility state (only for mobile)
