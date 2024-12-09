@@ -5,10 +5,17 @@
     import Layout from "./layout.svelte";
     
     let L = null; // Leaflet instance
-    const points = [];
-    let currentMarkers = [];
-    let searchQuery = '';
-    let userMarker = null;
+    const points = []; // all points from api cached
+    let currentMarkers = []; // all loaded markers
+
+    let searchQuery = ''; // current search query
+    let products = []; // products that shops must sell to show
+    let maxDistance = undefined; // distance in km
+    let showClosed = false; // closed shops are shown too
+    let firstLoad = true; // Makes the showClosed opposite in updateMap() to fix issue
+
+    let userPoint = null; // user coordinates
+    let userMarker = null; // user marker on map
     
     let map;
     
@@ -49,6 +56,33 @@
         }
     });
     
+    function isOpen(openHours) {
+        // Haal de huidige dag en tijd op
+        const now = new Date();
+        const currentDay = now.toLocaleString("en-US", { weekday: "long" }).toLowerCase();
+        const currentTime = now.getHours() * 60 + now.getMinutes(); // Tijd in minuten
+
+        // Controleer of de winkel op de huidige dag geopend is
+        if (!openHours[currentDay] || openHours[currentDay].toLowerCase() === "closed") {
+            return false;
+        }
+
+        // Haal de openingstijden op
+        const [open, close] = openHours[currentDay].split(" - ").map(time => {
+            const [hours, minutes] = time
+                .replace("AM", "")
+                .replace("PM", "")
+                .trim()
+                .split(":")
+                .map(Number);
+            const isPM = time.includes("PM");
+            return (isPM && hours !== 12 ? hours + 12 : hours) * 60 + (minutes || 0);
+        });
+
+        // Controleer of de huidige tijd binnen de openingstijden valt
+        return currentTime >= open && currentTime <= close;
+    }
+    
     // Fetch shops data
     async function fetchShops() {
         try {
@@ -58,6 +92,7 @@
                 name: shop.name,
                 address: shop.address,
                 city: shop.city,
+                open: isOpen(shop.openingHours),
             }));
         } catch (error) {
             console.error("Could not load shops:", error);
@@ -75,6 +110,7 @@
                 description: market.description,
                 address: market.location.address,
                 city: market.location.city,
+                open: true,
             }));
         } catch (error) {
             console.error("Could not load markets:", error);
@@ -105,6 +141,7 @@
                     popup: `${shop.name}`,
                     icon: "shop_icon.png",
                     ...coords,
+                    open: shop.open,
                 });
             }
         }
@@ -117,6 +154,7 @@
                     popup: `${market.name}<br>${market.description}`,
                     icon: "market_icon.png",
                     ...coords,
+                    open: true,
                 });
             }
         }
@@ -124,13 +162,18 @@
     
     // Update markers on the map
     function updateMap() {
+        const closedVisible = firstLoad ? true : showClosed;
+        firstLoad = false;
+
         currentMarkers.forEach(marker => {
             map.removeLayer(marker);
         });
         currentMarkers = [];
     
         points
-            .filter(point => point.name.toLowerCase().startsWith(searchQuery.toLowerCase()))
+            .filter(point => searchQuery ? point.name.toLowerCase().startsWith(searchQuery.toLowerCase()) : true)
+            .filter(point => maxDistance ? getDistanceFromLatLng(point.lat, point.lng, userPoint.lat, userPoint.lng) <= maxDistance : 1000)
+            .filter(point => closedVisible ? true : point.open)
             .forEach(point => {
                 const icon = L.icon({
                     iconUrl: point.icon,
@@ -155,6 +198,11 @@
         navigator.geolocation.getCurrentPosition(
             position => {
                 const { latitude, longitude } = position.coords;
+
+                userPoint = {
+                    lat: latitude,
+                    lng: longitude
+                };
 
                 // Add a marker for the user's location
                 const userIcon = L.icon({
@@ -188,11 +236,35 @@
         }
         updateMap();
     }
+
+    /* Distance between two lat/lng coordinates in km using the Haversine formula */
+    function getDistanceFromLatLng(lat1, lng1, lat2, lng2, miles) { // miles optional
+        if (typeof miles === "undefined"){miles=false;}
+        function deg2rad(deg){return deg * (Math.PI/180);}
+        function square(x){return Math.pow(x, 2);}
+        var r=6371; // radius of the earth in km
+        lat1=deg2rad(lat1);
+        lat2=deg2rad(lat2);
+        var lat_dif=lat2-lat1;
+        var lng_dif=deg2rad(lng2-lng1);
+        var a=square(Math.sin(lat_dif/2))+Math.cos(lat1)*Math.cos(lat2)*square(Math.sin(lng_dif/2));
+        var d=2*r*Math.asin(Math.sqrt(a));
+        if (miles){return d * 0.621371;} //return miles
+        else{return d;} //return km
+    }
+    /* Copyright 2016, Chris Youderian, SimpleMaps, http://simplemaps.com/resources/location-distance
+    Released under MIT license - https://opensource.org/licenses/MIT */ 
 </script>
 
 <Layout>
     <div slot="sidebar">
-        <input type="text" placeholder="Search..." bind:value={searchQuery} on:input={handleSearch}>
+        <input type="text" placeholder="Zoek..." bind:value={searchQuery} on:input={handleSearch}>
+        <input type="number" placeholder="Afstand... (km)" bind:value={maxDistance} on:input={handleSearch}>
+        <div>
+            <input type="checkbox" bind:checked={showClosed} on:input={handleSearch}>
+            <span class="text-sm">Gesloten winkels verbergen</span>
+        </div>
+        <button class="bg-green-600 text-white font-bold mt-20 rounded-md p-2 bottom-3">Zoek Winkels</button>
     </div>
 
     <div id="map-container">
