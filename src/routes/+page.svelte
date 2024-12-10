@@ -88,9 +88,12 @@
         try {
             const res = await fetch(`http://localhost:3010/shops/shops`);
             const json = await res.json();
+            console.log(json);
+            
             return json.map(shop => ({
+                id: shop.id,
                 name: shop.name,
-                address: shop.address,
+                address: shop.location,
                 city: shop.city,
                 open: isOpen(shop.openingHours),
             }));
@@ -105,7 +108,10 @@
         try {
             const res = await fetch(`http://localhost:3010/markets/markets`);
             const json = await res.json();
+            console.log("markets exist");
+            
             return json.map(market => ({
+                id: market.id,
                 name: market.name,
                 description: market.description,
                 address: market.location.address,
@@ -138,7 +144,7 @@
             if (coords) {
                 points.push({
                     name: shop.name,
-                    popup: `${shop.name}`,
+                    popup: `<b>${shop.name}</b><br><a href="/shops/${shop.id}">Meer informatie</a>`,
                     icon: "shop_icon.png",
                     ...coords,
                     open: shop.open,
@@ -151,7 +157,7 @@
             if (coords) {
                 points.push({
                     name: market.name,
-                    popup: `${market.name}<br>${market.description}`,
+                    popup: `<b>${market.name}</b><br>${market.description}<br><a href="/markets/${market.id}">Meer informatie</a>`,
                     icon: "market_icon.png",
                     ...coords,
                     open: true,
