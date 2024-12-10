@@ -32,9 +32,11 @@
         <slot name="sidebar" />
     </div>
     <div id="page">
-        <button id="sidebar-toggle-button" on:click={toggleSidebar}>
-            {sidebarVisible ? '<' : '>'}
-        </button>
+        <slot name="sidebar-toggle-button">
+            <button id="sidebar-toggle-button" on:click={toggleSidebar}>
+                {sidebarVisible ? '<' : '>'}
+            </button>
+        </slot>
         <slot />
     </div>
 </div>
