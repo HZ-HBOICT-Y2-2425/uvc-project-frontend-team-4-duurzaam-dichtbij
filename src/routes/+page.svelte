@@ -43,6 +43,8 @@
         const shops = await fetchShops();
         const markets = await fetchMarkets();
     
+        console.log(shops, markets);
+
         // Geocode and process points
         await geocodeAndProcessPoints(shops, markets);
     
@@ -88,13 +90,14 @@
         try {
             const res = await fetch(`http://localhost:3010/shops/shops`);
             const json = await res.json();
-            console.log(json);
             
             return json.map(shop => ({
                 id: shop.id,
                 name: shop.name,
-                address: shop.location,
-                city: shop.city,
+                address: {
+                    address: shop.address.address,
+                    city: shop.address.city,
+                },
                 open: isOpen(shop.openingHours),
             }));
         } catch (error) {
@@ -108,14 +111,15 @@
         try {
             const res = await fetch(`http://localhost:3010/markets/markets`);
             const json = await res.json();
-            console.log("markets exist");
             
             return json.map(market => ({
                 id: market.id,
                 name: market.name,
                 description: market.description,
-                address: market.location.address,
-                city: market.location.city,
+                address: {
+                    address: market.location.address,
+                    city: market.location.city,
+                },
                 open: true,
             }));
         } catch (error) {
@@ -153,7 +157,7 @@
         }
     
         for (const market of markets) {
-            const coords = await geocode(market);
+            const coords = await geocode(market.address);
             if (coords) {
                 points.push({
                     name: market.name,
