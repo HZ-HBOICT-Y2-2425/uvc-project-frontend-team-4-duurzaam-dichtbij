@@ -74,13 +74,13 @@
       <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Nieuwe Markt</h1>
       <form on:submit|preventDefault={submitForm} class="space-y-4">
           <div>
-              <label class="block text-gray-700 font-medium mb-1">Naam</label>
-              <input type="text" bind:value={formData.name} class="w-full border rounded px-4 py-2" />
+              <label for="name" class="block text-gray-700 font-medium mb-1">Naam</label>
+              <input id="name" type="text" bind:value={formData.name} class="w-full border rounded px-4 py-2" />
               {#if errors.name}<p class="text-red-500 text-sm">{errors.name}</p>{/if}
           </div>
           <div>
-              <label class="block text-gray-700 font-medium mb-1">Dag van de week</label>
-              <select bind:value={formData.dayOfWeek} class="w-full border rounded px-4 py-2">
+              <label for="day" class="block text-gray-700 font-medium mb-1">Dag van de week</label>
+              <select id="day" bind:value={formData.dayOfWeek} class="w-full border rounded px-4 py-2">
                   <option value="maandag">Maandag</option>
                   <option value="dinsdag">Dinsdag</option>
                   <option value="woensdag">Woensdag</option>
@@ -92,29 +92,29 @@
               {#if errors.dayOfWeek}<p class="text-red-500 text-sm">{errors.dayOfWeek}</p>{/if}
           </div>
           <div>
-              <label class="block text-gray-700 font-medium mb-1">Starttijd</label>
-              <input type="time" bind:value={formData.startTime} class="w-full border rounded px-4 py-2" />
+              <label for="starttime" class="block text-gray-700 font-medium mb-1">Starttijd</label>
+              <input id="starttime" type="time" bind:value={formData.startTime} class="w-full border rounded px-4 py-2" />
               {#if errors.startTime}<p class="text-red-500 text-sm">{errors.startTime}</p>{/if}
           </div>
           <div>
-              <label class="block text-gray-700 font-medium mb-1">Eindtijd</label>
-              <input type="time" bind:value={formData.endTime} class="w-full border rounded px-4 py-2" />
+              <label for="endtime" class="block text-gray-700 font-medium mb-1">Eindtijd</label>
+              <input id="endtime" type="time" bind:value={formData.endTime} class="w-full border rounded px-4 py-2" />
               {#if errors.endTime}<p class="text-red-500 text-sm">{errors.endTime}</p>{/if}
               {#if errors.timeRange}<p class="text-red-500 text-sm">{errors.timeRange}</p>{/if}
           </div>
           <div>
-              <label class="block text-gray-700 font-medium mb-1">Beschrijving</label>
-              <textarea bind:value={formData.description} class="w-full border rounded px-4 py-2"></textarea>
+              <label for="description" class="block text-gray-700 font-medium mb-1">Beschrijving</label>
+              <textarea id="description" bind:value={formData.description} class="w-full border rounded px-4 py-2"></textarea>
               {#if errors.description}<p class="text-red-500 text-sm">{errors.description}</p>{/if}
           </div>
           <div>
-              <label class="block text-gray-700 font-medium mb-1">Stad</label>
-              <input type="text" bind:value={formData.location.city} class="w-full border rounded px-4 py-2" />
+              <label for="city" class="block text-gray-700 font-medium mb-1">Stad</label>
+              <input id="city" type="text" bind:value={formData.location.city} class="w-full border rounded px-4 py-2" />
               {#if errors.city}<p class="text-red-500 text-sm">{errors.city}</p>{/if}
           </div>
           <div>
-              <label class="block text-gray-700 font-medium mb-1">Adres</label>
-              <input type="text" bind:value={formData.location.address} class="w-full border rounded px-4 py-2" />
+              <label for="address" class="block text-gray-700 font-medium mb-1">Adres</label>
+              <input id="address" type="text" bind:value={formData.location.address} class="w-full border rounded px-4 py-2" />
               {#if errors.address}<p class="text-red-500 text-sm">{errors.address}</p>{/if}
           </div>
           <button

@@ -119,8 +119,9 @@
       <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Maak nieuw evenement aan</h1>
       <form class="space-y-4" on:submit|preventDefault={submitForm}>
         <div>
-          <label class="block text-gray-700 font-medium mb-1">Naam</label>
+          <label for="name" class="block text-gray-700 font-medium mb-1">Naam</label>
           <input
+            id="name"
             type="text"
             bind:value={formData.name}
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
@@ -130,8 +131,8 @@
           {/if}
         </div>
         <div>
-          <label class="block text-gray-700 font-medium mb-1">Categorie</label>
-          <select placeholder="Selecteer een categorie" bind:value={formData.type} class="w-full border rounded px-4 py-2">
+          <label for="category" class="block text-gray-700 font-medium mb-1">Categorie</label>
+          <select id="category" placeholder="Selecteer een categorie" bind:value={formData.type} class="w-full border rounded px-4 py-2">
               <option value="Kookgroep">Kookgroep</option>
               <option value="Boodschappen">Boodschappen</option>
               <option value="Workshop">Workshop</option>
@@ -145,14 +146,16 @@
           {/if}
         </div>
         <div>
-          <label class="block text-gray-700 font-medium mb-1">Startdatum</label>
+          <label for="start-date" class="block text-gray-700 font-medium mb-1">Startdatum</label>
           <input
+            id="start-date"
             type="date"
             bind:value={startDate}
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
           />
-          <label class="block text-gray-700 font-medium mb-1 mt-2">Begintijd</label>
+          <label for="start-time" class="block text-gray-700 font-medium mb-1 mt-2">Begintijd</label>
           <input
+            id="start-time"
             type="time"
             bind:value={startTime}
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
@@ -162,14 +165,16 @@
           {/if}
         </div>
         <div>
-          <label class="block text-gray-700 font-medium mb-1">Einddatum</label>
+          <label for="end-date" class="block text-gray-700 font-medium mb-1">Einddatum</label>
           <input
+            id="end-date"
             type="date"
             bind:value={endDate}
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
           />
-          <label class="block text-gray-700 font-medium mb-1 mt-2">Eindtijd</label>
+          <label for="end-time" class="block text-gray-700 font-medium mb-1 mt-2">Eindtijd</label>
           <input
+            id="end-time"
             type="time"
             bind:value={endTime}
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
@@ -182,8 +187,9 @@
           {/if}
         </div>
         <div>
-          <label class="block text-gray-700 font-medium mb-1">Beschrijving</label>
+          <label for="description" class="block text-gray-700 font-medium mb-1">Beschrijving</label>
           <textarea
+            id="description"
             bind:value={formData.description}
             placeholder="Enter event description"
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
@@ -194,8 +200,9 @@
         </div>
         <div>
           <h2 class="text-lg font-bold text-gray-800 mb-2">Locatie</h2>
-          <label class="block text-gray-700 font-medium mb-1">Stad</label>
+          <label for="city" class="block text-gray-700 font-medium mb-1">Stad</label>
           <input
+            id="city"
             type="text"
             bind:value={formData.location.city}
             placeholder="Enter city"
@@ -204,8 +211,9 @@
           {#if errors.city}
             <p class="text-red-500 text-sm mt-1">{errors.city}</p>
           {/if}
-          <label class="block text-gray-700 font-medium mb-1">Adres</label>
+          <label for="address" class="block text-gray-700 font-medium mb-1">Adres</label>
           <input
+            id="address"
             type="text"
             bind:value={formData.location.address}
             placeholder="Enter address"

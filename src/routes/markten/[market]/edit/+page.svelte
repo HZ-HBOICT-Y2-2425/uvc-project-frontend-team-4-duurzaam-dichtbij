@@ -87,8 +87,9 @@
   <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Bewerk Markt</h1>
   <form class="space-y-4" on:submit|preventDefault={submitForm}>
     <div>
-      <label class="block text-gray-700 font-medium mb-1">Naam</label>
+      <label for="name" class="block text-gray-700 font-medium mb-1">Naam</label>
       <input
+        id="name"
         type="text"
         bind:value={formData.name}
         placeholder="Naam van het evenement"
@@ -100,8 +101,8 @@
     </div>
 
     <div>
-      <label class="block text-gray-700 font-medium mb-1">Dag van de week</label>
-      <select bind:value={formData.dayOfWeek} class="w-full border rounded px-4 py-2">
+      <label for="day" class="block text-gray-700 font-medium mb-1">Dag van de week</label>
+      <select id="day" bind:value={formData.dayOfWeek} class="w-full border rounded px-4 py-2">
         <option value="">Selecteer een dag</option>
         <option value="maandag">Maandag</option>
         <option value="dinsdag">Dinsdag</option>
@@ -115,8 +116,9 @@
     </div>
 
     <div>
-      <label class="block text-gray-700 font-medium mb-1">Starttijd</label>
+      <label for="start-time" class="block text-gray-700 font-medium mb-1">Starttijd</label>
       <input
+        id="start-time"
         type="time"
         bind:value={formData.startTime}
         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
@@ -127,8 +129,9 @@
     </div>
 
     <div>
-      <label class="block text-gray-700 font-medium mb-1">Eindtijd</label>
+      <label for="end-time" class="block text-gray-700 font-medium mb-1">Eindtijd</label>
       <input
+        id="end-time"
         type="time"
         bind:value={formData.endTime}
         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
@@ -142,8 +145,9 @@
     </div>
 
     <div>
-      <label class="block text-gray-700 font-medium mb-1">Beschrijving</label>
+      <label for="description" class="block text-gray-700 font-medium mb-1">Beschrijving</label>
       <textarea
+        id="description"
         bind:value={formData.description}
         placeholder="Beschrijving van het evenement"
         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
@@ -155,8 +159,9 @@
 
     <div>
       <h2 class="text-lg font-bold text-gray-800 mb-2">Locatie</h2>
-      <label class="block text-gray-700 font-medium mb-1">Stad</label>
+      <label for="city" class="block text-gray-700 font-medium mb-1">Stad</label>
       <input
+        id="city"
         type="text"
         bind:value={formData.location.city}
         placeholder="Stad"
@@ -166,8 +171,9 @@
         <p class="text-red-500 text-sm mt-1">{errors.city}</p>
       {/if}
 
-      <label class="block text-gray-700 font-medium mb-1">Adres</label>
+      <label for="address" class="block text-gray-700 font-medium mb-1">Adres</label>
       <input
+        id="address"
         type="text"
         bind:value={formData.location.address}
         placeholder="Adres"
