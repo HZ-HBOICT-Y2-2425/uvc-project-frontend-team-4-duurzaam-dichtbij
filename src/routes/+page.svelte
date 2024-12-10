@@ -132,6 +132,7 @@
     async function geocodeAndProcessPoints(shops, markets) {
         const geocode = async ({ address, city }) => {
             try {
+                console.log(`Geocoding ${address}, ${city}`);
                 const res = await fetch(
                     `https://nominatim.openstreetmap.org/search?street=${address}&city=${city}&format=jsonv2`
                 );
@@ -317,9 +318,5 @@
     #loading img {
         width: 50px;
         height: 50px;
-    }
-
-    :global(#page) {
-        flex: auto !important;
     }
 </style>

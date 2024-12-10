@@ -54,13 +54,13 @@
 
     #page {
         display: inline;
-        flex: none;
+        flex: auto;
     }
 
     #container {
         display: flex;
         flex: 1;
-        overflow: hidden;
+        overflow: auto;
         position: relative;
     }
 
