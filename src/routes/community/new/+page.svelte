@@ -3,7 +3,7 @@
     import { goto } from "$app/navigation";
   
     // Form data state
-    let formData = {
+    const formData = {
       name: "",
       type: "",
       startDate: "",

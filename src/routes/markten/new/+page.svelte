@@ -2,7 +2,7 @@
   import { goto } from "$app/navigation";
 
   // Formulier data
-  let formData = {
+  const formData = {
       name: "",
       dayOfWeek: "",
       startTime: "",
