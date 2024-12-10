@@ -1,6 +1,7 @@
 <script>
     import { onMount } from "svelte";
-    
+    import "../app.css";
+
     let sidebarVisible = false; // Sidebar visibility state
     let menubarVisible = false; // Menubar visibility state (only for mobile)
 
@@ -28,7 +29,7 @@
 </div>
 <div id="container">
     <div id="sidebar" class:visible={sidebarVisible}>
-        Sidebar content here...
+        <slot name="sidebar" />
     </div>
     <div id="page">
         <button id="sidebar-toggle-button" on:click={toggleSidebar}>
