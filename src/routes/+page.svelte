@@ -144,7 +144,7 @@
             if (coords) {
                 points.push({
                     name: shop.name,
-                    popup: `<b>${shop.name}</b><br><a href="/shops/${shop.id}">More info</a>`,
+                    popup: `<b>${shop.name}</b><br><a href="/shops/${shop.id}">Meer informatie</a>`,
                     icon: "shop_icon.png",
                     ...coords,
                     open: shop.open,
@@ -157,7 +157,7 @@
             if (coords) {
                 points.push({
                     name: market.name,
-                    popup: `<b>${market.name}</b><br>${market.description}<br><a href="/markets/${market.id}">More info</a>`,
+                    popup: `<b>${market.name}</b><br>${market.description}<br><a href="/markets/${market.id}">Meer informatie</a>`,
                     icon: "market_icon.png",
                     ...coords,
                     open: true,
