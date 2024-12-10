@@ -3,6 +3,7 @@
 
     import { onMount } from 'svelte';
     import { page } from '$app/stores';
+    import Layout from '../../layout.svelte';
 
     let shop = null;
 
@@ -23,7 +24,7 @@
 
     const fetchShop = async (id) => {
         try {
-            const res = await fetch(`http://localhost:3010/shops/shops/${id}`);
+            const res = await fetch(`http://localhost:3010/shops/shop/${id}`);
             if (res.ok) {
                 shop = await res.json();
                 console.log(shop);
@@ -39,33 +40,45 @@
     };
 </script>
 
-<main>
-    {#if shop}
-    <div class="shop-details">
-        <h1>{shop.name}</h1>
-        <p class="address">{shop.address.address}, {shop.address.city}</p>
-        <p class="phone">Phone: {shop.phoneNumber}</p>
-        <h2>Opening Hours</h2>
-        <ul class="opening-hours">
-            <li>Monday: {shop.openingHours.monday || "Closed"}</li>
-            <li>Tuesday: {shop.openingHours.tuesday || "Closed"}</li>
-            <li>Wednesday: {shop.openingHours.wednesday || "Closed"}</li>
-            <li>Thursday: {shop.openingHours.thursday || "Closed"}</li>
-            <li>Friday: {shop.openingHours.friday || "Closed"}</li>
-            <li>Saturday: {shop.openingHours.saturday || "Closed"}</li>
-            <li>Sunday: {shop.openingHours.sunday || "Closed"}</li>
-        </ul>
-        <h2>Paying Methods</h2>
-        <ul class="paying-methods">
-            {#each shop.payingMethods as method}
-                <li>{method}</li>
-            {/each}
-        </ul>
+<Layout>
+    <div slot="sidebar">
+        <!-- Sidebar content specific to this page -->
+        <h2>Custom Sidebar Content</h2>
+        <p>This is specific to the map page.</p>
+        <p>Oehh!</p>
     </div>
-{:else}
-    <p>Loading shop details...</p>
-{/if}
-</main>
+
+    <main>
+        {#if shop}
+        <div class="shop-details">
+            <h1>{shop.name}</h1>
+            {#if shop.image}
+                <img src="http://localhost:3010/shops/{shop.image}" alt={shop.name}>
+            {/if}
+            <p class="address">{shop.location.address}, {shop.location.city}</p>
+            <p class="phone">Phone: {shop.phoneNumber}</p>
+            <h2>Opening Hours</h2>
+            <ul class="opening-hours">
+                <li>Monday: {shop.openingHours.monday || "Closed"}</li>
+                <li>Tuesday: {shop.openingHours.tuesday || "Closed"}</li>
+                <li>Wednesday: {shop.openingHours.wednesday || "Closed"}</li>
+                <li>Thursday: {shop.openingHours.thursday || "Closed"}</li>
+                <li>Friday: {shop.openingHours.friday || "Closed"}</li>
+                <li>Saturday: {shop.openingHours.saturday || "Closed"}</li>
+                <li>Sunday: {shop.openingHours.sunday || "Closed"}</li>
+            </ul>
+            <h2>Paying Methods</h2>
+            <ul class="paying-methods">
+                {#each shop.payingMethods as method}
+                    <li>{method}</li>
+                {/each}
+            </ul>
+        </div>
+    {:else}
+        <p>Loading shop details...</p>
+    {/if}
+    </main>
+</Layout>
 
 <style>
     main {

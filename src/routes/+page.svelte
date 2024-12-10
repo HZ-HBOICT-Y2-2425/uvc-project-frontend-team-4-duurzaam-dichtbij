@@ -93,7 +93,7 @@
             return json.map(shop => ({
                 id: shop.id,
                 name: shop.name,
-                address: shop.address,
+                address: shop.location,
                 city: shop.city,
                 open: isOpen(shop.openingHours),
             }));
