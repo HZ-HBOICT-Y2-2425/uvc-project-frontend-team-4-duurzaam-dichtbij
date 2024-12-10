@@ -1,6 +1,8 @@
 <script>
+    // @ts-nocheck
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
+    import Layout from "../../layout.svelte";
   
     // Form data state
     const formData = {
@@ -112,8 +114,10 @@
         isSubmitting = false;
       }
     };
-  </script>  
+</script>  
   
+<Layout>
+  <div slot="sidebar-toggle-button"></div>
   <main class="min-h-screen bg-gray-100 flex items-center justify-center">
     <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
       <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Maak nieuw evenement aan</h1>
@@ -238,4 +242,5 @@
       {/if}
     </div>
   </main>
+</Layout>
   
