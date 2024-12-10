@@ -1,6 +1,7 @@
 <script>
     import Event from "$lib/components/Event.svelte";
     import { onMount } from "svelte";
+    import Layout from "../layout.svelte";
 
     let selectedType = '';
     let filteredEvents = [];
@@ -23,8 +24,10 @@
     const eventTypes = [...new Set(data?.events.map(event => event.type))];
 </script>
 
-<section class="p-4">
-    <div class="flex justify-between">
+<Layout>
+    <div slot="sidebar-toggle-button"></div>
+
+        <div class="flex justify-between">
         <h1 class="text-4xl pb-2 font-bold">Community</h1>
         <a href="/community/new">
             <button class="btn btn-green">Nieuw evenement</button>
@@ -53,7 +56,7 @@
             <p>Op dit moment zijn er geen evenementen van dit type gepland.</p>
         {/if}
     </div>
-</section>
+</Layout>
 
 <style>
     .btn {
