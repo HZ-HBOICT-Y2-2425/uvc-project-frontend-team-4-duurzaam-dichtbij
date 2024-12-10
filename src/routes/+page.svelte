@@ -95,8 +95,8 @@
                 id: shop.id,
                 name: shop.name,
                 address: {
-                    address: shop.address.address,
-                    city: shop.address.city,
+                    address: shop.location.address,
+                    city: shop.location.city,
                 },
                 open: isOpen(shop.openingHours),
             }));
