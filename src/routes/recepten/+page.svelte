@@ -1,21 +1,22 @@
 <script>
-    import { onMount } from "svelte";
-    import Layout from "../layout.svelte";
+    import { setContext } from "svelte";
+    import Recipe from '$lib/components/Recipe.svelte';
+  import Layout from "../layout.svelte";
+    export let data;
 
-    onMount(async () => {
-        console.log('Page loaded');
+    setContext('apiReference', {
+        mainUrl: 'http://localhost:3011'
     });
 </script>
 
 <Layout>
-    <div slot="sidebar">
-        <!-- Sidebar content specific to this page -->
-        <h2>Custom Sidebar Content</h2>
-        <p>This is specific to the map page.</p>
-        <p>Oehh!</p>
+    <div slot="sidebar-toggle-button"></div>
+    <h2 class="text-center text-2xl font-bold text-gray-700 my-6">All Recipes</h2>
+    <div class="flex flex-row  bg-white shadow rounded">
+        {#each data.items.results as recipe}
+                <Recipe recipeUrl={`/recipes/${recipe.id}`} />
+        {/each}
     </div>
-
-    <h2>Profiellll</h2>
 </Layout>
 
 <style>
