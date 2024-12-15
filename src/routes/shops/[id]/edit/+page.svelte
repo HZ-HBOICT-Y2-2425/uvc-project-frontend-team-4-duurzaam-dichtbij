@@ -80,20 +80,10 @@ const updateShop = async () => {
             formData.append('image', newImage);
         }
 
-        // Log formData for debugging
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
-
         const response = await fetch(`http://localhost:3010/shops/shop/${shop.id}`, {
             method: "PUT",
             body: formData
         });
-
-        // Log response for debugging
-        console.log('Response status:', response.status);
-        const responseBody = await response.text();
-        console.log('Response body:', responseBody);
 
         if (!response.ok)
             throw new Error(`Failed to update shop: ${response.statusText}`);
