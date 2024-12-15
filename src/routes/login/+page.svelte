@@ -18,56 +18,53 @@
     ];
 
     function handleLogin() {
-        // Zoek de gebruiker in de hardcoded lijst
         const user = users.find(u => u.username === username && u.password === password);
 
         if (user) {
-            // Als de gebruiker bestaat, sla de gegevens op in localStorage en navigeer naar het profiel
             localStorage.setItem('user', JSON.stringify(user));
             goto('/voortgang');
         } else {
-            // Foutmelding als gebruikersnaam of wachtwoord incorrect is
             errorMessage = 'Onjuiste gebruikersnaam of wachtwoord';
         }
     }
 
     onMount(() => {
-        // Verwijder de foutmelding bij het inladen van de pagina
         errorMessage = '';
     });
 </script>
 
-<div id="login-container">
-    <h2 class="heading">Inloggen</h2>
+<div id="wrapper">
+    <div id="login-container">
+        <h2 class="heading">Inloggen</h2>
 
-    <div class="form-group">
-        <label for="username">Gebruikersnaam</label>
-        <input type="text" id="username" bind:value={username} placeholder="Gebruikersnaam" />
+        <div class="form-group">
+            <label for="username">Gebruikersnaam</label>
+            <input type="text" id="username" bind:value={username} placeholder="Gebruikersnaam" />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Wachtwoord</label>
+            <input type="password" id="password" bind:value={password} placeholder="Wachtwoord" />
+        </div>
+
+        <button on:click={handleLogin}>Inloggen</button>
+
+        {#if errorMessage}
+            <p class="error">{errorMessage}</p>
+        {/if}
     </div>
-
-    <div class="form-group">
-        <label for="password">Wachtwoord</label>
-        <input type="password" id="password" bind:value={password} placeholder="Wachtwoord" />
-    </div>
-
-    <button on:click={handleLogin}>Inloggen</button>
-
-    {#if errorMessage}
-        <p class="error">{errorMessage}</p>
-    {/if}
 </div>
 
 <style>
-    /* Algemene stijlen */
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f4f7fc;
-        margin: 0;
-        padding: 0;
+    /* Wrapper om de inhoud lokaal te centreren */
+    #wrapper {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        height: 100vh; /* Volledige hoogte van de viewport */
+        background-color: #f4f7fc;
+        padding: 20px; /* Voor kleinere schermen */
+        box-sizing: border-box;
     }
 
     #login-container {
@@ -75,15 +72,16 @@
         max-width: 400px;
         padding: 25px;
         background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         text-align: center;
+        animation: fadeIn 0.5s ease;
     }
 
     .heading {
         font-size: 2rem;
         color: #333;
-        margin-bottom: 25px;
+        margin-bottom: 20px;
     }
 
     .form-group {
@@ -93,8 +91,8 @@
 
     .form-group label {
         font-size: 0.9rem;
-        font-weight: 600;
-        color: #666;
+        font-weight: bold;
+        color: #555;
         margin-bottom: 8px;
         display: block;
     }
@@ -106,7 +104,7 @@
         border-radius: 8px;
         font-size: 1rem;
         outline: none;
-        transition: border-color 0.3s;
+        transition: all 0.3s ease;
     }
 
     .form-group input:focus {
@@ -119,12 +117,12 @@
         padding: 12px;
         background-color: #4caf50;
         color: white;
-        font-size: 1.1rem;
+        font-size: 1rem;
         font-weight: bold;
         border: none;
         border-radius: 8px;
         cursor: pointer;
-        transition: background-color 0.3s;
+        transition: background-color 0.3s ease;
     }
 
     button:hover {
@@ -135,6 +133,8 @@
         color: #f44336;
         font-size: 0.9rem;
         margin-top: 15px;
-        font-weight: 600;
+        font-weight: bold;
     }
+
+
 </style>

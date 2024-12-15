@@ -6,7 +6,7 @@ import Layout from "../layout.svelte";
 
 // @ts-ignore
 let user = null; // Houdt de gebruikersinformatie bij
-let message = 'U bent niet ingelogd'; // Standaard bericht als gebruiker niet is ingelogd
+const message = 'U bent niet ingelogd'; // Standaard bericht als gebruiker niet is ingelogd
 
 onMount(() => {
     const storedUser = localStorage.getItem('user'); // Haal de opgeslagen gebruiker uit localStorage
@@ -18,13 +18,8 @@ onMount(() => {
 </script>
 
 <Layout>
-    <div slot="sidebar">
-        <!-- Sidebar content specific to this page -->
-        <h2>Custom Sidebar Content</h2>
-        <p>This is specific to the map page.</p>
-        <p>Oehh!</p>
-    </div>
-
+    
+    <div slot="sidebar-toggle-button"></div>
     <div id="profile-container">
         {#if user} 
             <!-- Toon profielinformatie als de gebruiker is ingelogd -->
