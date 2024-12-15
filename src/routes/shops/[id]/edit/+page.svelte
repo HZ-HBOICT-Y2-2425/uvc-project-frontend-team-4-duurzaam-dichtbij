@@ -14,7 +14,7 @@ let form = {
         city: '',
         address: ''
     },
-    phonenumber: '',
+    phoneNumber: '',
     openingHours: {
         monday: '',
         tuesday: '',
@@ -24,8 +24,11 @@ let form = {
         saturday: '',
         sunday: ''
     },
-    payingMethods: []
+    payingMethods: [],
+    image: ''
 };
+let newPayingMethod = '';
+let newImage = null;
 
 // Fetch shop data when the component mounts
 onMount(() => {
@@ -60,19 +63,61 @@ const fetchShop = async (id) => {
 
 const updateShop = async () => {
     try {
+        const formData = new FormData();
+        formData.append('name', form.name);
+        formData.append('location[city]', form.location.city);
+        formData.append('location[address]', form.location.address);
+        formData.append('phoneNumber', form.phoneNumber);
+        formData.append('openingHours[monday]', form.openingHours.monday);
+        formData.append('openingHours[tuesday]', form.openingHours.tuesday);
+        formData.append('openingHours[wednesday]', form.openingHours.wednesday);
+        formData.append('openingHours[thursday]', form.openingHours.thursday);
+        formData.append('openingHours[friday]', form.openingHours.friday);
+        formData.append('openingHours[saturday]', form.openingHours.saturday);
+        formData.append('openingHours[sunday]', form.openingHours.sunday);
+        formData.append('payingMethods', JSON.stringify(form.payingMethods));
+        if (newImage) {
+            formData.append('image', newImage);
+        }
+
+        // Log formData for debugging
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
+
         const response = await fetch(`http://localhost:3010/shops/shop/${shop.id}`, {
             method: "PUT",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(form)
+            body: formData
         });
+
+        // Log response for debugging
+        console.log('Response status:', response.status);
+        const responseBody = await response.text();
+        console.log('Response body:', responseBody);
+
         if (!response.ok)
             throw new Error(`Failed to update shop: ${response.statusText}`);
+
         goto(`/shops/${shop.id}`);
     } catch (err) {
         error = err.message;
+        console.error('Error updating shop:', err);
     }
+};
+
+const addPayingMethod = () => {
+    if (newPayingMethod.trim() !== '') {
+        form.payingMethods = [...form.payingMethods, newPayingMethod.trim()];
+        newPayingMethod = '';
+    }
+};
+
+const removePayingMethod = (index) => {
+    form.payingMethods = form.payingMethods.filter((_, i) => i !== index);
+};
+
+const handleImageChange = (event) => {
+    newImage = event.target.files[0];
 };
 
 </script>
@@ -126,17 +171,49 @@ const updateShop = async () => {
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="phoneNumber">Telefoonnummer</label>
                         <input
                             type="text"
-                            id="phonenumber"
+                            id="phoneNumber"
                             bind:value={form.phoneNumber}
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="payingMethods">Betaalmethoden</label>
+                        <div class="flex items-center mb-2">
+                            <input
+                                type="text"
+                                id="newPayingMethod"
+                                bind:value={newPayingMethod}
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            />
+                            <button
+                                type="button"
+                                on:click={addPayingMethod}
+                                class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            >
+                                Toevoegen
+                            </button>
+                        </div>
+                        <ul>
+                            {#each form.payingMethods as method, index}
+                                <li class="flex items-center mb-2">
+                                    <span class="flex-1">{method}</span>
+                                    <button
+                                        type="button"
+                                        on:click={() => removePayingMethod(index)}
+                                        class="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+                                    >
+                                        Verwijderen
+                                    </button>
+                                </li>
+                            {/each}
+                        </ul>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="image">Afbeelding</label>
                         <input
-                            type="text"
-                            id="payingMethods"
-                            bind:value={form.payingMethods}
+                            type="file"
+                            id="image"
+                            on:change={handleImageChange}
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                     </div>
