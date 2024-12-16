@@ -8,11 +8,26 @@
 <a href="/markten/{market.id}" class="block pb-4">
     <div class="bg-white shadow-lg rounded-lg p-4 hover:shadow-xl transition transform flex justify-between items-center">
         <div>
-            <h2 class="text-xl font-bold text-gray-800 mb-2">{market.name}</h2>
+            <div class="flex">
+                <h2 class="text-xl font-bold text-gray-800 mb-2">{market.name}</h2>
+                {#if market.verified}
+                    <img title="Geverifieerd" src="/checkmark.svg" alt="Checkmark voor geverifieerde markt" class="pb-2 pl-1 w-8" />
+                {/if}
+            </div>
             <p class="text-gray-600">{market.description}</p>
         </div>
-        {#if market.verified}
-            <img title="Geverifieerd" src="/checkmark.svg" alt="Checkmark voor geverifieerde markt" class="h-10 w-10" />
-        {/if}
+        <button class="btn btn-green">Meer info</button>
     </div>
 </a>
+
+<style>
+    .btn {
+      @apply font-bold py-2 px-4 rounded;
+    }
+    .btn-green {
+      @apply bg-green-500 text-white;
+    }
+    .btn-green:hover {
+      @apply bg-green-700;
+    }
+</style>
