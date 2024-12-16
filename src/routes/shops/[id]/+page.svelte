@@ -62,11 +62,7 @@ const copyLink = () => {
 </script>
 
 <Layout>
-    <div slot="sidebar">
-        <!-- Sidebar content specific to this page -->
-        <h2>Custom Sidebar Content</h2>
-        <p>This is specific to the shop page.</p>
-    </div>
+    <div slot="sidebar-toggle-button"></div>
 
     <main class="min-h-screen bg-gray-100 py-8 px-4">
         {#if error}

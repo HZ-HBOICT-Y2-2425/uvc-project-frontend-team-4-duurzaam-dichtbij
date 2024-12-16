@@ -45,8 +45,8 @@
     
         console.log(shops, markets);
 
-        // Geocode and process points
-        await geocodeAndProcessPoints(shops, markets);
+        // Process the points
+        processPoints(shops, markets);
     
         // Display the points on the map
         updateMap();
@@ -98,6 +98,8 @@
                     address: shop.location.address,
                     city: shop.location.city,
                 },
+                lat: shop.lat,
+                lng: shop.lng,
                 open: isOpen(shop.openingHours),
             }));
         } catch (error) {
@@ -120,6 +122,8 @@
                     address: market.location.address,
                     city: market.location.city,
                 },
+                lat: market.lat,
+                lng: market.lng,
                 open: true,
             }));
         } catch (error) {
@@ -129,45 +133,27 @@
     }
     
     // Geocode points
-    async function geocodeAndProcessPoints(shops, markets) {
-        const geocode = async ({ address, city }) => {
-            try {
-                console.log(`Geocoding ${address}, ${city}`);
-                const res = await fetch(
-                    `https://nominatim.openstreetmap.org/search?street=${address}&city=${city}&format=jsonv2`
-                );
-                const json = await res.json();
-                return { lat: json[0].lat, lng: json[0].lon };
-            } catch (error) {
-                console.error(`${address}, ${city} seems to be a fake address!`);
-                return null;
-            }
-        };
-    
+    function processPoints(shops, markets) {
         for (const shop of shops) {
-            const coords = await geocode(shop.address);
-            if (coords) {
-                points.push({
-                    name: shop.name,
-                    popup: `<b>${shop.name}</b><br><a href="/shops/${shop.id}">Meer informatie</a>`,
-                    icon: "shop_icon.png",
-                    ...coords,
-                    open: shop.open,
-                });
-            }
+            points.push({
+                name: shop.name,
+                popup: `<b>${shop.name}</b><br><a href="/shops/${shop.id}">Meer informatie</a>`,
+                icon: "shop_icon.png",
+                lat: shop.lat,
+                lng: shop.lng,
+                open: shop.open,
+            });
         }
     
         for (const market of markets) {
-            const coords = await geocode(market.address);
-            if (coords) {
-                points.push({
-                    name: market.name,
-                    popup: `<b>${market.name}</b><br>${market.description}<br><a href="/markten/${market.id}">Meer informatie</a>`,
-                    icon: "market_icon.png",
-                    ...coords,
-                    open: true,
-                });
-            }
+            points.push({
+                name: market.name,
+                popup: `<b>${market.name}</b><br>${market.description}<br><a href="/markets/${market.id}">Meer informatie</a>`,
+                icon: "market_icon.png",
+                lat: market.lat,
+                lng: market.lng,
+                open: true,
+            });
         }
     }
     
