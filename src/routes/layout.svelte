@@ -39,6 +39,7 @@
     <ul id="menu-items">
         <li><a href="/">Home</a></li>
         <li><a href="/recepten">Recepten</a></li>
+        <li><a href="/markten">Markten</a></li>
         <li><a href="/community">Community</a></li>
         <li><a href="/voortgang">Voortgang</a></li>
         <li><a href="/profiel">Profiel</a></li>

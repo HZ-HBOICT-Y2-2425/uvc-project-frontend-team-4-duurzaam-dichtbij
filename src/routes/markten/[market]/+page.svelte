@@ -90,6 +90,7 @@
 </script>
 
 <Layout>
+  <div slot="sidebar-toggle-button"></div>
   <main class="min-h-screen bg-gray-100 py-8 px-4">
     {#if error}
       <p class="text-center text-red-500 font-medium">Error: {error}</p>
@@ -125,9 +126,7 @@
             {/if}
           </div>
         </div>
-  
         <p class="text-gray-600 mb-6">{market.description}</p>
-  
         <div class="flex flex-wrap gap-6">
           <div class="flex-1">
             <h2 class="text-lg font-semibold text-gray-700 mb-2">Details</h2>
@@ -145,7 +144,7 @@
             </ul>
           </div>
         </div>
-  
+
         <div class="mt-8 text-center flex justify-between">
           <a
             href="/markten"
