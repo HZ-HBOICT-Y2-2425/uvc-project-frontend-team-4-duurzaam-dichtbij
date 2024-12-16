@@ -77,7 +77,7 @@
           <form on:submit|preventDefault={submitForm} class="space-y-4">
               <div>
                   <label for="name" class="block text-gray-700 font-medium mb-1">Naam</label>
-                  <input id="name" type="text" bind:value={formData.name} class="w-full border rounded px-4 py-2" />
+                  <input placeholder="Boerenmarkt" id="name" type="text" bind:value={formData.name} class="w-full border rounded px-4 py-2" />
                   {#if errors.name}<p class="text-red-500 text-sm">{errors.name}</p>{/if}
               </div>
               <div>
@@ -106,17 +106,17 @@
               </div>
               <div>
                   <label for="description" class="block text-gray-700 font-medium mb-1">Beschrijving</label>
-                  <textarea id="description" bind:value={formData.description} class="w-full border rounded px-4 py-2"></textarea>
+                  <textarea placeholder="Weekmarkt in Middelburg met allerlei verse soorten groenten en fruit." id="description" bind:value={formData.description} class="w-full border rounded px-4 py-2"></textarea>
                   {#if errors.description}<p class="text-red-500 text-sm">{errors.description}</p>{/if}
               </div>
               <div>
                   <label for="city" class="block text-gray-700 font-medium mb-1">Stad</label>
-                  <input id="city" type="text" bind:value={formData.location.city} class="w-full border rounded px-4 py-2" />
+                  <input placeholder="Middelburg" id="city" type="text" bind:value={formData.location.city} class="w-full border rounded px-4 py-2" />
                   {#if errors.city}<p class="text-red-500 text-sm">{errors.city}</p>{/if}
               </div>
               <div>
                   <label for="address" class="block text-gray-700 font-medium mb-1">Adres</label>
-                  <input id="address" type="text" bind:value={formData.location.address} class="w-full border rounded px-4 py-2" />
+                  <input placeholder="Het Groene Woud, 1" id="address" type="text" bind:value={formData.location.address} class="w-full border rounded px-4 py-2" />
                   {#if errors.address}<p class="text-red-500 text-sm">{errors.address}</p>{/if}
               </div>
               <button

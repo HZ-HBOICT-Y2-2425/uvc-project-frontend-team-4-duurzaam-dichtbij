@@ -11,7 +11,7 @@
 </script>
 
 <Layout>
-    <section class="p-4">
+    <section class="p-4 bg-gray-100 min-h-full">
         <div class="flex justify-between">
             <h1 class="text-4xl pb-2 font-bold">Markten</h1>
             <a href="/markten/new">

@@ -143,6 +143,7 @@
         <input
           id="name"
           type="text"
+          placeholder="Samen koken"
           bind:value={formData.name}
           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
         />
@@ -223,7 +224,7 @@
         <textarea
           id="description"
           bind:value={formData.description}
-          placeholder="Event description"
+          placeholder="Kookgroep waarbij we samen allerlei lekkernijen gaan bereiden met boerenproducten."
           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
         ></textarea>
         {#if errors.description}
@@ -238,7 +239,7 @@
           id="city"
           type="text"
           bind:value={formData.location.city}
-          placeholder="City"
+          placeholder="Middelburg"
           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
         />
         {#if errors.city}
@@ -250,7 +251,7 @@
           id="address"
           type="text"
           bind:value={formData.location.address}
-          placeholder="Address"
+          placeholder="Het Groene Woud, 1"
           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
         />
         {#if errors.address}

@@ -94,7 +94,7 @@
             id="name"
             type="text"
             bind:value={formData.name}
-            placeholder="Naam van het evenement"
+            placeholder="Boerenmarkt"
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
           />
           {#if errors.name}
@@ -151,7 +151,7 @@
           <textarea
             id="description"
             bind:value={formData.description}
-            placeholder="Beschrijving van het evenement"
+            placeholder="Weekmarkt in Middelburg met allerlei verse soorten groenten en fruit."
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
           ></textarea>
           {#if errors.description}
@@ -166,7 +166,7 @@
             id="city"
             type="text"
             bind:value={formData.location.city}
-            placeholder="Stad"
+            placeholder="Middelburg"
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
           />
           {#if errors.city}
@@ -178,7 +178,7 @@
             id="address"
             type="text"
             bind:value={formData.location.address}
-            placeholder="Adres"
+            placeholder="Het Groene Woud, 1"
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
           />
           {#if errors.address}
