@@ -1,11 +1,22 @@
 <script>
     import { onMount } from "svelte";
-    
+    import "../app.css";
+
     let sidebarVisible = false; // Sidebar visibility state
     let menubarVisible = false; // Menubar visibility state (only for mobile)
+    
+    let isLoggedIn = false;
+    let user = null;
 
-    onMount(async () => {
+    // Check the login status from localStorage
+    onMount(() => {
         menubarVisible = window.innerWidth >= 768;
+        
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            user = JSON.parse(storedUser);
+            isLoggedIn = true;
+        }
     });
 
     function toggleSidebar() {
@@ -15,28 +26,48 @@
     function toggleMenubar() {
         menubarVisible = !menubarVisible;
     }
+
+    function logout() {
+        // Remove the user from localStorage and set isLoggedIn to false
+        localStorage.removeItem('user');
+        isLoggedIn = false;
+        window.location.href = '/'; // Redirect to home or another page
+    }
 </script>
 
 <div id="menubar" class:visible={menubarVisible}>
     <ul id="menu-items">
         <li><a href="/">Home</a></li>
         <li><a href="/recepten">Recepten</a></li>
+        <li><a href="/markten">Markten</a></li>
         <li><a href="/community">Community</a></li>
         <li><a href="/voortgang">Voortgang</a></li>
         <li><a href="/profiel">Profiel</a></li>
+      
     </ul>
+    
+    <!-- Login or Logout button -->
+    {#if !isLoggedIn}
+        <button on:click={() => window.location.href = "/login"}>Login</button>
+    {:else}
+        <button on:click={logout}>Uitloggen</button>
+    {/if}
 </div>
+
 <div id="container">
     <div id="sidebar" class:visible={sidebarVisible}>
-        Sidebar content here...
+        <slot name="sidebar" />
     </div>
     <div id="page">
-        <button id="sidebar-toggle-button" on:click={toggleSidebar}>
-            {sidebarVisible ? '<' : '>'}
-        </button>
+        <slot name="sidebar-toggle-button">
+            <button id="sidebar-toggle-button" on:click={toggleSidebar}>
+                {sidebarVisible ? '<' : '>'}
+            </button>
+        </slot>
         <slot />
     </div>
 </div>
+
 <button id="hamburger-menu-button" on:click={toggleMenubar}>
     ☰
 </button>
@@ -51,13 +82,13 @@
 
     #page {
         display: inline;
-        flex: none;
+        flex: auto;
     }
 
     #container {
         display: flex;
         flex: 1;
-        overflow: hidden;
+        overflow: auto;
         position: relative;
     }
 
@@ -66,7 +97,7 @@
         color: white;
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
         padding: 0 20px;
         position: absolute;
         top: 0;
@@ -76,7 +107,6 @@
         transition: transform 0.3s ease-in-out;
     }
 
-    /* Menubar height adjustments */
     #menubar:not(.visible) {
         transform: translateY(-100%);
     }
@@ -86,29 +116,28 @@
         margin: 0;
         padding: 0;
         display: flex;
-        flex-wrap: nowrap; /* Prevent overflow of menu items */
+        flex-wrap: nowrap;
         gap: 20px;
     }
 
     #menu-items li {
         height: 50px;
-        width: 100%; /* Full width for clickability on mobile */
+        width: 100%; 
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
     #menu-items li a {
-        text-decoration: none; /* Remove underline */
-        color: inherit; /* Inherit text color from parent */
-        width: 100%; /* Make the link fill the entire li */
-        height: 100%; /* Match li height for clickability */
-        display: flex; /* Use flexbox for centering */
-        align-items: center; /* Vertical centering */
-        justify-content: center; /* Horizontal centering */
+        text-decoration: none; 
+        color: inherit;
+        width: 100%; 
+        height: 100%;
+        display: flex;
+        align-items: center; 
+        justify-content: center; 
     }
 
-    /* Ensure proper stacking of menu items on smaller screens */
     @media (max-width: 768px) {
         #menu-items {
             flex-direction: column;
@@ -122,21 +151,20 @@
             top: 0;
             left: 0;
             right: 0;
-            height: auto; /* Adjust height based on content */
+            height: auto; 
         }
 
         #menu-items li {
             text-align: center;
-            width: 100%; /* Ensure full-width for mobile menu items */
+            width: 100%; 
         }
     }
 
-    /* On larger screens, menubar is always visible */
     @media (min-width: 768px) {
         #menubar {
-            transform: none; /* Always visible */
+            transform: none;
             position: static;
-            height: 50px; /* Fixed height for desktop */
+            height: 50px; 
         }
 
         #menu-items {
@@ -149,7 +177,7 @@
         }
 
         #hamburger-menu-button {
-            display: none; /* Hide hamburger button */
+            display: none; 
         }
     }
 
@@ -164,7 +192,7 @@
         bottom: 0;
         transform: translateX(-100%);
         transition: transform 0.3s ease-in-out;
-        z-index: 2000; /* Sidebar is above map and Leaflet controls */
+        z-index: 2000;
     }
 
     #sidebar.visible {
@@ -182,7 +210,7 @@
         border-radius: 5px;
         padding: 5px 10px;
         cursor: pointer;
-        z-index: 2001; /* Button is above the sidebar */
+        z-index: 2001;
     }
 
     #hamburger-menu-button {
@@ -196,6 +224,6 @@
         padding: 10px 15px;
         font-size: 1.2em;
         cursor: pointer;
-        z-index: 3002; /* Ensure above everything else */
+        z-index: 3002;
     }
 </style>
