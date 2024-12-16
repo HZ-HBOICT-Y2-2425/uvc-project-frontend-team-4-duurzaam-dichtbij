@@ -41,12 +41,7 @@
 </script>
 
 <Layout>
-    <div slot="sidebar">
-        <!-- Sidebar content specific to this page -->
-        <h2>Custom Sidebar Content</h2>
-        <p>This is specific to the map page.</p>
-        <p>Oehh!</p>
-    </div>
+    <div slot="sidebar-toggle-button"></div>
 
     <main>
         {#if shop}
