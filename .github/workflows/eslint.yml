@@ -1,0 +1,61 @@
+name: Frontend Code Quality and Unit Tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout de repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Stel Node.js in
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.11.0'
+
+      # Installeer frontend dependencies
+      - name: Install Dependencies
+        run: |
+          npm install
+
+      # Run Linter
+      - name: Controleer of eslint.config.js aanwezig is
+        run: |
+          if [ ! -f eslint.config.js ]; then
+            echo "Creating default ESLint configuration..."
+            cat <<EOF > eslint.config.js
+          export default [
+            {
+              files: ["**/*.svelte", "**/*.ts", "**/*.js"],
+              rules: {
+                semi: ["error", "always"],
+                "prefer-const": "error"
+              },
+              ignores: ["node_modules/**", ".svelte-kit/**"],
+            }
+          ]
+          EOF
+          else
+          echo "eslint.config.js already exists."
+          fi
+        
+      # Install ESLint
+      - name: Install ESLint
+        run: |
+          npm install eslint --save-dev
+
+      # Run ESLint
+      - name: Run ESLint
+        run: |
+          npx eslint . --ignore-pattern ".svelte-kit/**" --ignore-pattern "node_modules/**" --ignore-pattern "src/app.d.ts"
+
+      # Run Unit Tests
+    #  - name: Run Unit Tests
+     #   run: |
+      #    npm test
