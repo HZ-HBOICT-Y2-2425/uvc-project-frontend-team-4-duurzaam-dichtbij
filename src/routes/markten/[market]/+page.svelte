@@ -89,6 +89,7 @@
 </script>
 
 <Layout>
+  <div slot="sidebar-toggle-button"></div>
   <main class="min-h-screen bg-gray-100 py-8 px-4">
     {#if error}
       <p class="text-center text-red-500 font-medium">Error: {error}</p>

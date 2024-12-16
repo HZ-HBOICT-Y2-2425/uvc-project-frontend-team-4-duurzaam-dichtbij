@@ -84,6 +84,7 @@
 </script>
 
 <Layout>
+  <div slot="sidebar-toggle-button"></div>
   <main class="min-h-screen bg-gray-100 flex items-center justify-center">
     <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
       <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Bewerk Markt</h1>
