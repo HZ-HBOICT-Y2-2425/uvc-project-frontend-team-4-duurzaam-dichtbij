@@ -16,18 +16,6 @@
             </div>
             <p class="text-gray-600">{market.description}</p>
         </div>
-        <button class="btn btn-green">Meer info</button>
+        <button class="font-bold py-2 px-4 rounded bg-green-500 text-white hover:bg-green-700">Meer info</button>
     </div>
 </a>
-
-<style>
-    .btn {
-      @apply font-bold py-2 px-4 rounded;
-    }
-    .btn-green {
-      @apply bg-green-500 text-white;
-    }
-    .btn-green:hover {
-      @apply bg-green-700;
-    }
-</style>
