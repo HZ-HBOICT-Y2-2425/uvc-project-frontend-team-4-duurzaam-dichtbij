@@ -148,7 +148,7 @@
         for (const market of markets) {
             points.push({
                 name: market.name,
-                popup: `<b>${market.name}</b><br>${market.description}<br><a href="/markets/${market.id}">Meer informatie</a>`,
+                popup: `<b>${market.name}</b><br>${market.description}<br><a href="/markten/${market.id}">Meer informatie</a>`,
                 icon: "market_icon.png",
                 lat: market.lat,
                 lng: market.lng,
