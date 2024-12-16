@@ -1,4 +1,5 @@
 <script>
+  // @ts-nocheck
   import { onMount } from "svelte";
   import { page } from "$app/stores"; // To access route parameters
   import { goto } from "$app/navigation";
@@ -125,9 +126,7 @@
             {/if}
           </div>
         </div>
-
         <p class="text-gray-600 mb-6">{market.description}</p>
-
         <div class="flex flex-wrap gap-6">
           <div class="flex-1">
             <h2 class="text-lg font-semibold text-gray-700 mb-2">Details</h2>

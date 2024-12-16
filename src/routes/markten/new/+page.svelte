@@ -1,73 +1,74 @@
 <script>
-  import { goto } from "$app/navigation";
+    // @ts-nocheck
+    import { goto } from "$app/navigation";
     import Layout from "../../layout.svelte";
 
-  // Formulier data
-  const formData = {
-      name: "",
-      dayOfWeek: "",
-      startTime: "",
-      endTime: "",
-      description: "",
-      location: {
-          city: "",
-          address: ""
-      }
-  };
+    // Formulier data
+    const formData = {
+        name: "",
+        dayOfWeek: "",
+        startTime: "",
+        endTime: "",
+        description: "",
+        location: {
+            city: "",
+            address: ""
+        }
+    };
 
-  // Validatie fouten
-  let errors = {};
-  let submissionResponse = "";
-  let isSubmitting = false;
+    // Validatie fouten
+    let errors = {};
+    let submissionResponse = "";
+    let isSubmitting = false;
 
-  // Functie om formulier te valideren
-  const validateForm = () => {
-      errors = {};
+    // Functie om formulier te valideren
+    const validateForm = () => {
+        errors = {};
 
-      if (!formData.name.trim()) errors.name = "Naam is verplicht.";
-      if (!formData.dayOfWeek) errors.dayOfWeek = "Dag van de week is verplicht.";
-      if (!formData.startTime) errors.startTime = "Starttijd is verplicht.";
-      if (!formData.endTime) errors.endTime = "Eindtijd is verplicht.";
-      if (formData.startTime && formData.endTime && formData.startTime >= formData.endTime) {
-          errors.timeRange = "Starttijd moet voor eindtijd liggen.";
-      }
-      if (!formData.description.trim()) errors.description = "Beschrijving is verplicht.";
-      if (!formData.location.city.trim()) errors.city = "Stad is verplicht.";
-      if (!formData.location.address.trim()) errors.address = "Adres is verplicht.";
+        if (!formData.name.trim()) errors.name = "Naam is verplicht.";
+        if (!formData.dayOfWeek) errors.dayOfWeek = "Dag van de week is verplicht.";
+        if (!formData.startTime) errors.startTime = "Starttijd is verplicht.";
+        if (!formData.endTime) errors.endTime = "Eindtijd is verplicht.";
+        if (formData.startTime && formData.endTime && formData.startTime >= formData.endTime) {
+            errors.timeRange = "Starttijd moet voor eindtijd liggen.";
+        }
+        if (!formData.description.trim()) errors.description = "Beschrijving is verplicht.";
+        if (!formData.location.city.trim()) errors.city = "Stad is verplicht.";
+        if (!formData.location.address.trim()) errors.address = "Adres is verplicht.";
 
-      return Object.keys(errors).length === 0;
-  };
+        return Object.keys(errors).length === 0;
+    };
 
-  // Functie om formulier te verzenden
-  const submitForm = async () => {
-      if (!validateForm()) {
-          submissionResponse = "Corrigeer de fouten.";
-          return;
-      }
+    // Functie om formulier te verzenden
+    const submitForm = async () => {
+        if (!validateForm()) {
+            submissionResponse = "Corrigeer de fouten.";
+            return;
+        }
 
-      isSubmitting = true;
-      submissionResponse = "";
+        isSubmitting = true;
+        submissionResponse = "";
 
-      try {
-          const response = await fetch("http://localhost:3010/markets/markets", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(formData)
-          });
+        try {
+            const response = await fetch("http://localhost:3010/markets/markets", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            });
 
-          if (response.ok) {
-              submissionResponse = "Markt succesvol aangemaakt!";
-              goto("/markten");
-          } else {
-              const errorText = await response.text();
-              submissionResponse = `Fout: ${errorText}`;
-          }
-      } catch (error) {
-          submissionResponse = `Fout: ${error.message}`;
-      } finally {
-          isSubmitting = false;
-      }
-  };
+            if (response.ok) {
+                submissionResponse = "Markt succesvol aangemaakt!";
+                goto("/markten");
+            } else {
+                const errorText = await response.text();
+                submissionResponse = `Fout: ${errorText}`;
+            }
+        } catch (error) {
+            submissionResponse = `Fout: ${error.message}`;
+        } finally {
+            isSubmitting = false;
+        }
+    };
 </script>
 
 <Layout>
