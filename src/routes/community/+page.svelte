@@ -28,7 +28,7 @@
 
 <Layout>
     <div slot="sidebar-toggle-button"></div>
-    <section class="p-4">
+    <section class="p-4 bg-gray-100 min-h-full">
         <div class="flex justify-between">
             <h1 class="text-4xl pb-2 font-bold">Community</h1>
             <a href="/community/new">
