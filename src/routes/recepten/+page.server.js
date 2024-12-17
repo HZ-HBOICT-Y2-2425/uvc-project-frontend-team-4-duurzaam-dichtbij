@@ -1,4 +1,5 @@
-export const load = async (/** @type {{ fetch: any; }} */ serverLoadEvent) => {
+// @ts-ignore
+export const load = async (serverLoadEvent) => {
     try {
         const { fetch } = serverLoadEvent;
         const res = await fetch(`http://localhost:3011/recipes`);
