@@ -1,12 +1,12 @@
 <script>
+    // @ts-nocheck
     import { onMount } from "svelte";
     import "../app.css";
 
     let sidebarVisible = false; // Sidebar visibility state
     let menubarVisible = false; // Menubar visibility state (only for mobile)
-    
-    let isLoggedIn = false;
-    let user = null;
+
+    export let user = null; // User object
 
     // Check the login status from localStorage
     onMount(() => {
@@ -15,7 +15,6 @@
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             user = JSON.parse(storedUser);
-            isLoggedIn = true;
         }
     });
 
@@ -26,32 +25,20 @@
     function toggleMenubar() {
         menubarVisible = !menubarVisible;
     }
-
-    function logout() {
-        // Remove the user from localStorage and set isLoggedIn to false
-        localStorage.removeItem('user');
-        isLoggedIn = false;
-        window.location.href = '/'; // Redirect to home or another page
-    }
 </script>
 
 <div id="menubar" class:visible={menubarVisible}>
     <ul id="menu-items">
         <li><a href="/">Home</a></li>
+        <li><a href="/kaart">Kaart</a></li>
         <li><a href="/recepten">Recepten</a></li>
+        {#if user}
         <li><a href="/markten">Markten</a></li>
+        {/if}
         <li><a href="/community">Community</a></li>
         <li><a href="/voortgang">Voortgang</a></li>
         <li><a href="/profiel">Profiel</a></li>
-      
     </ul>
-    
-    <!-- Login or Logout button -->
-    {#if !isLoggedIn}
-        <button on:click={() => window.location.href = "/login"}>Login</button>
-    {:else}
-        <button on:click={logout}>Uitloggen</button>
-    {/if}
 </div>
 
 <div id="container">
@@ -97,14 +84,14 @@
         color: white;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
         padding: 0 20px;
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         z-index: 3000;
-        transition: transform 0.3s ease-in-out;
+        /*transition: transform 0.3s ease-in-out;*/
     }
 
     #menubar:not(.visible) {
