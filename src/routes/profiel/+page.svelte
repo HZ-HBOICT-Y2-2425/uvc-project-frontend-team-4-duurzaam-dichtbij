@@ -15,7 +15,7 @@
         // Remove the user from localStorage and set isLoggedIn to false
         localStorage.removeItem('user');
         user = null;
-        window.location.href = '/'; // Redirect to home or another page
+        window.location.href = '/profiel'; // Redirect to home or another page
     }
 </script>
 
@@ -34,7 +34,7 @@
         {:else}
             <!-- Toon bericht als de gebruiker niet is ingelogd -->
             <h2>U bent niet ingelogd!</h2>
-            <button class="p-4 rounded-md bg-green-400" on:click={() => window.location.href = "/login"}>Login</button>
+            <a href="/login"><button class="p-4 rounded-md bg-green-400">Login</button></a>
         {/if}
     </div>
 </Layout>

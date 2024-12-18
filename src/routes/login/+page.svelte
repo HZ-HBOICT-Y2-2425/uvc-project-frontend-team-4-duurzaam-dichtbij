@@ -1,4 +1,5 @@
 <script>
+    // @ts-nocheck
     import { onMount } from "svelte";
     import { goto } from '$app/navigation';
     import Layout from "../layout.svelte";
@@ -29,8 +30,10 @@
         }
     }
 
+    let ref = null;
     onMount(() => {
         errorMessage = '';
+        ref.focus();
     });
 </script>
 
@@ -41,7 +44,7 @@
     
             <div class="mb-5 text-left">
                 <label for="username" class="block text-sm font-bold text-gray-600 mb-2">Gebruikersnaam</label>
-                <input type="text" id="username" bind:value={username} placeholder="Gebruikersnaam" class="w-full p-3 border border-gray-300 rounded-lg text-base outline-none transition duration-300 focus:border-green-500 focus:shadow-outline-green" />
+                <input type="text" id="username" bind:this={ref} bind:value={username} placeholder="Gebruikersnaam" class="w-full p-3 border border-gray-300 rounded-lg text-base outline-none transition duration-300 focus:border-green-500 focus:shadow-outline-green"/>
             </div>
     
             <div class="mb-5 text-left">
@@ -49,7 +52,7 @@
                 <input type="password" id="password" bind:value={password} placeholder="Wachtwoord" class="w-full p-3 border border-gray-300 rounded-lg text-base outline-none transition duration-300 focus:border-green-500 focus:shadow-outline-green" />
             </div>
     
-            <button on:click={handleLogin} class="w-full p-3 bg-green-500 text-white text-base font-bold rounded-lg cursor-pointer transition duration-300 hover:bg-green-600">Inloggen</button>
+            <button type="submit" on:click={handleLogin} class="w-full p-3 bg-green-500 text-white text-base font-bold rounded-lg cursor-pointer transition duration-300 hover:bg-green-600">Inloggen</button>
     
             {#if errorMessage}
                 <p class="text-red-500 text-sm mt-4 font-bold">{errorMessage}</p>
