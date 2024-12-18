@@ -16,8 +16,8 @@
             password: 'p',
             email: 'testuser@example.com',
             role: "admin",
-            level: 0,
-            reduction: 5
+            level: 2,
+            reduction: 100
         },
         {
             id: 2,
