@@ -119,6 +119,8 @@
             {/each}
 
             {#if showModal}
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div class="modal-overlay" on:click={closeModal}>
                     <div class="modal-content" on:click|stopPropagation>
                         <h2 class="modal-title">KORTING</h2>
@@ -129,6 +131,8 @@
             {/if}
 
             {#if showModal2}
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div class="modal-overlay" on:click={closeModal}>
                     <div class="modal-content" on:click|stopPropagation>
                         <p class="modal-text">QR zijn besteld</p>
@@ -141,10 +145,7 @@
 </Layout>
 
 <style>
-    html, body {
-        height: 100%;
-        margin: 0;
-    }
+ 
 
     .content-container {
         display: flex;
