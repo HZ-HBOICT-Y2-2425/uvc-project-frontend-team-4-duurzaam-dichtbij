@@ -11,8 +11,7 @@
     let searchQuery = ''; // current search query
     //let products = []; // products that shops must sell to show
     let maxDistance = undefined; // distance in km
-    let showClosed = false; // closed shops are shown too
-    let firstLoad = true; // Makes the showClosed opposite in updateMap() to fix issue
+    let showClosed = true; // closed shops are shown too
 
     let userPoint = null; // user coordinates
     let userMarker = null; // user marker on map
@@ -159,8 +158,7 @@
     
     // Update markers on the map
     function updateMap() {
-        const closedVisible = firstLoad ? true : showClosed;
-        firstLoad = false;
+        const closedVisible = showClosed;
 
         currentMarkers.forEach(marker => {
             map.removeLayer(marker);
@@ -225,13 +223,17 @@
         );
     }
 
-
     function handleSearch() {
         if (L === null) {
             console.error('L is null');
             return;
         }
         updateMap();
+    }
+
+    const handleCheckboxClick = evt => {
+        showClosed = evt.target.checked;
+        handleSearch();
     }
 
     /* Distance between two lat/lng coordinates in km using the Haversine formula */
@@ -251,6 +253,16 @@
     }
     /* Copyright 2016, Chris Youderian, SimpleMaps, http://simplemaps.com/resources/location-distance
     Released under MIT license - https://opensource.org/licenses/MIT */ 
+
+    function toggleField(field) {
+        const fields = document.querySelectorAll('[id$="-field"]');
+        fields.forEach(field => field.classList.toggle('hidden', true));
+
+        const fieldElement = document.getElementById(`${field}-field`);
+        if (fieldElement) {
+            fieldElement.classList.toggle('hidden');
+        }
+    }
 </script>
 
 <Layout>
@@ -258,7 +270,7 @@
         <input type="text" placeholder="Zoek..." bind:value={searchQuery} on:input={handleSearch}>
         <input type="number" placeholder="Afstand... (km)" bind:value={maxDistance} on:input={handleSearch}>
         <div>
-            <input type="checkbox" bind:checked={showClosed} on:input={handleSearch}>
+            <input type="checkbox" checked={showClosed} on:input={handleCheck(showClosed, () => handleSearch())}>
             <span class="text-sm">Gesloten winkels verbergen</span>
         </div>
         <button class="bg-green-600 text-white font-bold mt-20 rounded-md p-2 bottom-3">Zoek Winkels</button>
@@ -268,6 +280,28 @@
         <div id="loading">
             <img src="https://media.tenor.com/_62bXB8gnzoAAAAj/loading.gif" alt="loading">
             <p>Loading Map</p>
+        </div>
+        <div class="ml-12 absolute top-2 left-2 flex flex-col bg-transparent z-[2500]">
+            <button class="bg-white rounded mb-2 border-none p-2 text-black text-lg cursor-pointer flex items-center" on:click={() => toggleField('search')}>
+            <img src="https://www.svgrepo.com/download/532552/search-alt-2.svg" alt="Search Icon" class="mr-2 w-6"> Zoek Winkel
+            </button>
+            <button class="bg-white rounded mb-2 border-none p-2 text-black text-lg cursor-pointer flex items-center" on:click={() => toggleField('filters')}>
+            <img src="https://www.svgrepo.com/download/521661/filter.svg" alt="Filter Icon" class="mr-2 w-6"> Filters
+            </button>
+        </div>
+        <div id="search-field" class="hidden field bg-white p-4 text-xl rounded shadow-lg absolute top-16 left-2 z-[2501]">
+            <!-- HTML content for search field -->
+            <button class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-[35px] font-bold" on:click={() => toggleField('')}>×</button>
+            <input type="text" placeholder="Zoek..." bind:value={searchQuery} on:input={handleSearch}>
+        </div>
+        <div id="filters-field" class="hidden field bg-white p-4 text-xl rounded shadow-lg absolute top-16 left-2 z-[2502]">
+            <!-- HTML content for filters field -->
+            <button class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-[35px] font-bold" on:click={() => toggleField('')}>×</button>
+            <input type="number" placeholder="Afstand... (km)" bind:value={maxDistance} on:input={handleSearch}>
+            <div>
+            <input type="checkbox" checked={showClosed} on:input={handleCheckboxClick}>
+            <span>Gesloten winkels weergeven</span>
+            </div>
         </div>
         <div id="map"></div>
     </div>
