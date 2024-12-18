@@ -27,7 +27,7 @@
 	"dependencies": {
 		"flowbite": "^2.5.2",
 		"flowbite-svelte": "^0.47.4",
-		"html5-qrcode": "^2.3.8"
+		"html5-qrcode": "^2.3.8",
 		"tailwind-fontawesome": "^0.7.1"
 	}
 }
