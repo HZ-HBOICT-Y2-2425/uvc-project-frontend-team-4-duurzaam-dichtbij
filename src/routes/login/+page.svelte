@@ -12,11 +12,23 @@
         {
             id: 1,
             name: 'Test User',
-            username: 't',
+            username: 'a',
             password: 'p',
             email: 'testuser@example.com',
+            role: "admin",
+            level: 0,
             reduction: 5
-        }
+        },
+        {
+            id: 1,
+            name: 'Test User',
+            username: 'u',
+            password: 'p',
+            email: 'testuser@example.com',
+            role: "user",
+            level: 0,
+            reduction: 5
+        },
     ];
 
     function handleLogin() {

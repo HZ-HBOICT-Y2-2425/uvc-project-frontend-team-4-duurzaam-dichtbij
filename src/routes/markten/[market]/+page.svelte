@@ -7,6 +7,7 @@
 
   let market = null; // Market data
   let error = null;
+  let storedUser = null;
 
   // Fetch market details
   const fetchMarketDetails = async (id) => {
@@ -86,6 +87,12 @@
   onMount(async () => {
     const marketId = $page.params.market;
     await fetchMarketDetails(marketId);
+    try {
+      storedUser = JSON.parse(localStorage.getItem('user')) || null;
+    } catch (error) {
+      console.warn("Geen geldige gebruiker gevonden:", error);
+      storedUser = null;
+    }
   });
 </script>
 
@@ -109,6 +116,7 @@
               class="bg-green-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-700 transition"
               >Deel</button
             >
+            {#if storedUser?.role === "admin"}
             {#if market.verified}
               <button
                 id="verify"
@@ -123,6 +131,7 @@
                 class="bg-green-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition"
                 >Verifieer</button
               >
+            {/if}
             {/if}
           </div>
         </div>
