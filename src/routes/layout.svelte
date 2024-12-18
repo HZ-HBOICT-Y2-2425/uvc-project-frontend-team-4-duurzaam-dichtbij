@@ -38,6 +38,7 @@
         <li><a href="/community">Community</a></li>
         <li><a href="/voortgang">Voortgang</a></li>
         <li><a href="/profiel">Profiel</a></li>
+        <li><a href="/Qrcode">qr</a></li>
     </ul>
 </div>
 
