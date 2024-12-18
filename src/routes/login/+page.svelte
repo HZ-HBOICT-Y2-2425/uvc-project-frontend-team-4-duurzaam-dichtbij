@@ -1,8 +1,19 @@
 <script>
     // @ts-nocheck
     import { onMount } from "svelte";
-    import { goto } from '$app/navigation';
+    import { goto, afterNavigate } from '$app/navigation';
     import Layout from "../layout.svelte";
+
+    const base = '/';
+    let previousPage = base;
+
+    afterNavigate(({from}) => {
+        console.log(base);
+        previousPage = from?.url.pathname || previousPage;
+        if (previousPage.toLocaleLowerCase() === window.location.pathname.toLocaleLowerCase() || previousPage.replace(' ', '') == '') {
+            previousPage = base;
+        }
+    })
 
     let username = '';
     let password = '';
@@ -11,22 +22,22 @@
     const users = [
         {
             id: 1,
-            name: 'Test User',
+            name: 'Henk de Vries',
             username: 'a',
             password: 'p',
             email: 'testuser@example.com',
             role: "admin",
-            level: 2,
-            reduction: 90
+            level: 1,
+            reduction: 5
         },
         {
             id: 2,
-            name: 'Test User',
+            name: 'Ria de Boer',
             username: 'u',
             password: 'p',
             email: 'testuser@example.com',
             role: "user",
-            level: 0,
+            level: 1,
             reduction: 5
         },
     ];
@@ -36,7 +47,7 @@
 
         if (user) {
             localStorage.setItem('user', JSON.stringify(user));
-            goto('/voortgang');
+            goto(previousPage);
         } else {
             errorMessage = 'Onjuiste gebruikersnaam of wachtwoord';
         }
