@@ -20,8 +20,6 @@
 </script>
 
 <Layout>
-    <div slot="sidebar-toggle-button"></div>
-
     <div class="relative">
         <img src="homepage-pic.jpg" alt="Sustainability Background" class="fixed top-0 left-0 w-full h-full object-cover z-0">
         <div class="relative z-10 container mx-auto p-4">
@@ -52,8 +50,7 @@
                         <div class="w-full h-5 bg-gray-300 rounded-full mb-5">
                             <div class="h-full rounded-full bg-green-500" style="width: {(user.reduction / co2RequiredToLevelUp) * 100}%;"></div>
                         </div>
-            
-                        <p class="text-lg text-green-700 font-medium">Bereik { co2RequiredToLevelUp }kg besparing en bereik een nieuw level!</p>
+                        <a href="/voortgang"><button class="bg-green-500 text-white px-4 py-2 rounded-lg">Bekijk Voortgang</button></a>
                     {:else}
                         <a href="/login"><button class="bg-green-500 text-white px-4 py-2 rounded-lg">Inloggen</button></a>
                     {/if}
