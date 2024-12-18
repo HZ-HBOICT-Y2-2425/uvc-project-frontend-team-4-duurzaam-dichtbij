@@ -17,7 +17,7 @@
             email: 'testuser@example.com',
             role: "admin",
             level: 2,
-            reduction: 100
+            reduction: 90
         },
         {
             id: 2,
