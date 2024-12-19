@@ -3,6 +3,7 @@
     import { onMount } from "svelte";
     import { goto, afterNavigate } from '$app/navigation';
     import Layout from "../layout.svelte";
+    import { users } from "$lib/users";
 
     const base = '/';
     let previousPage = base;
@@ -18,29 +19,6 @@
     let username = '';
     let password = '';
     let errorMessage = '';
-
-    const users = [
-        {
-            id: 1,
-            name: 'Henk de Vries',
-            username: 'a',
-            password: 'p',
-            email: 'testuser@example.com',
-            role: "admin",
-            level: 1,
-            reduction: 5
-        },
-        {
-            id: 2,
-            name: 'Ria de Boer',
-            username: 'u',
-            password: 'p',
-            email: 'testuser@example.com',
-            role: "user",
-            level: 1,
-            reduction: 5
-        },
-    ];
 
     function handleLogin() {
         const user = users.find(u => u.username === username && u.password === password);
