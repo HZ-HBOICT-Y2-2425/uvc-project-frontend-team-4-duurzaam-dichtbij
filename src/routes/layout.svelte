@@ -1,12 +1,12 @@
 <script>
+    // @ts-nocheck
     import { onMount } from "svelte";
     import "../app.css";
 
     let sidebarVisible = false; // Sidebar visibility state
     let menubarVisible = false; // Menubar visibility state (only for mobile)
-    
-    let isLoggedIn = false;
-    let user = null;
+
+    export let user = null; // User object
 
     // Check the login status from localStorage
     onMount(() => {
@@ -15,7 +15,6 @@
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             user = JSON.parse(storedUser);
-            isLoggedIn = true;
         }
     });
 
@@ -26,49 +25,28 @@
     function toggleMenubar() {
         menubarVisible = !menubarVisible;
     }
-
-    function logout() {
-        // Remove the user from localStorage and set isLoggedIn to false
-        localStorage.removeItem('user');
-        isLoggedIn = false;
-        window.location.href = '/'; // Redirect to home or another page
-    }
 </script>
 
-<div id="menubar" class:visible={menubarVisible}>
-    <ul id="menu-items">
-        <li><a href="/">Home</a></li>
-        <li><a href="/recepten">Recepten</a></li>
-        <li><a href="/markten">Markten</a></li>
-        <li><a href="/community">Community</a></li>
-        <li><a href="/voortgang">Voortgang</a></li>
-        <li><a href="/profiel">Profiel</a></li>
-      
+<div id="menubar" class="bg-gray-800 text-white flex items-center justify-center px-5 absolute top-0 left-0 right-0 z-[3999] md:static md:h-12 md:transform-none transition-transform duration-300" class:visible={menubarVisible}>
+    <ul id="menu-items" class="list-none m-0 p-5 flex flex-col gap-5 w-full md:flex-row md:gap-5 md:p-0 md:w-auto">
+        <li class="h-12 w-full flex items-center justify-center text-center md:w-auto md:px-2"><a href="/" class="no-underline text-inherit w-full h-full flex items-center justify-center">Home</a></li>
+        <li class="h-12 w-full flex items-center justify-center text-center md:w-auto md:px-2"><a href="/kaart" class="no-underline text-inherit w-full h-full flex items-center justify-center">Kaart</a></li>
+        <li class="h-12 w-full flex items-center justify-center text-center md:w-auto md:px-2"><a href="/recepten" class="no-underline text-inherit w-full h-full flex items-center justify-center">Recepten</a></li>
+        {#if user}
+        <li class="h-12 w-full flex items-center justify-center text-center md:w-auto md:px-2"><a href="/markten" class="no-underline text-inherit w-full h-full flex items-center justify-center">Markten</a></li>
+        {/if}
+        <li class="h-12 w-full flex items-center justify-center text-center md:w-auto md:px-2"><a href="/community" class="no-underline text-inherit w-full h-full flex items-center justify-center">Community</a></li>
+        <li class="h-12 w-full flex items-center justify-center text-center md:w-auto md:px-2"><a href="/profiel" class="no-underline text-inherit w-full h-full flex items-center justify-center">Profiel</a></li>
     </ul>
-    
-    <!-- Login or Logout button -->
-    {#if !isLoggedIn}
-        <button on:click={() => window.location.href = "/login"}>Login</button>
-    {:else}
-        <button on:click={logout}>Uitloggen</button>
-    {/if}
 </div>
 
-<div id="container">
-    <div id="sidebar" class:visible={sidebarVisible}>
-        <slot name="sidebar" />
-    </div>
-    <div id="page">
-        <slot name="sidebar-toggle-button">
-            <button id="sidebar-toggle-button" on:click={toggleSidebar}>
-                {sidebarVisible ? '<' : '>'}
-            </button>
-        </slot>
+<div id="container" class="flex-1 overflow-auto relative flex">
+    <div id="page" class="inline-flex-auto w-full">
         <slot />
     </div>
 </div>
 
-<button id="hamburger-menu-button" on:click={toggleMenubar}>
+<button id="hamburger-menu-button" class="absolute right-2.5 top-2.5 bg-gray-800 text-white border-none rounded px-3.5 py-2.5 text-xl cursor-pointer z-[4000] md:hidden" on:click={toggleMenubar}>
     ☰
 </button>
 
@@ -80,150 +58,17 @@
         flex-direction: column;
     }
 
-    #page {
-        display: inline;
-        flex: auto;
-    }
-
-    #container {
-        display: flex;
-        flex: 1;
-        overflow: auto;
-        position: relative;
-    }
-
-    #menubar {
-        background: #333;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 20px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 3000;
-        transition: transform 0.3s ease-in-out;
-    }
-
     #menubar:not(.visible) {
         transform: translateY(-100%);
     }
 
-    #menu-items {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-wrap: nowrap;
-        gap: 20px;
-    }
-
-    #menu-items li {
-        height: 50px;
-        width: 100%; 
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    #menu-items li a {
-        text-decoration: none; 
-        color: inherit;
-        width: 100%; 
-        height: 100%;
-        display: flex;
-        align-items: center; 
-        justify-content: center; 
-    }
-
-    @media (max-width: 768px) {
-        #menu-items {
-            flex-direction: column;
-            gap: 10px;
-            padding: 10px 0;
-            width: 100%;
-        }
-
-        #menubar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: auto; 
-        }
-
-        #menu-items li {
-            text-align: center;
-            width: 100%; 
-        }
+    #menubar.visible {
+        transform: translateY(0);
     }
 
     @media (min-width: 768px) {
         #menubar {
-            transform: none;
-            position: static;
-            height: 50px; 
+            transform: none !important;
         }
-
-        #menu-items {
-            flex-direction: row;
-            gap: 20px;
-        }
-
-        #menu-items li {
-            padding-inline: 10px;
-        }
-
-        #hamburger-menu-button {
-            display: none; 
-        }
-    }
-
-    #sidebar {
-        width: 250px;
-        background: #f4f4f4;
-        padding: 20px;
-        overflow-y: auto;
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        transform: translateX(-100%);
-        transition: transform 0.3s ease-in-out;
-        z-index: 2000;
-    }
-
-    #sidebar.visible {
-        transform: translateX(0);
-    }
-
-    #sidebar-toggle-button {
-        position: absolute;
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: #333;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 5px 10px;
-        cursor: pointer;
-        z-index: 2001;
-    }
-
-    #hamburger-menu-button {
-        position: absolute;
-        right: 10px;
-        top: 10px;
-        background: #333;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 15px;
-        font-size: 1.2em;
-        cursor: pointer;
-        z-index: 3002;
     }
 </style>

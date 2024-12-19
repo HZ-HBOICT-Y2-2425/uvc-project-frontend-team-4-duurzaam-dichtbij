@@ -1,24 +1,25 @@
 <script>
 // @ts-nocheck
+    import { onMount } from 'svelte';
+    import Layout from "../layout.svelte";
 
-import { onMount } from 'svelte';
-import Layout from "../layout.svelte";
+    let user = null;
+    onMount(async () => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            user = JSON.parse(storedUser);
+        }
+    });
 
-// @ts-ignore
-let user = null; // Houdt de gebruikersinformatie bij
-const message = 'U bent niet ingelogd'; // Standaard bericht als gebruiker niet is ingelogd
-
-onMount(() => {
-    const storedUser = localStorage.getItem('user'); // Haal de opgeslagen gebruiker uit localStorage
-
-    if (storedUser) {
-        user = JSON.parse(storedUser); // Zet de gebruiker als er een is opgeslagen
+    function logout() {
+        // Remove the user from localStorage and set isLoggedIn to false
+        localStorage.removeItem('user');
+        user = null;
+        window.location.href = '/profiel'; // Redirect to home or another page
     }
-});
 </script>
 
 <Layout>
-    
     <div slot="sidebar-toggle-button"></div>
     <div id="profile-container">
         {#if user} 
@@ -29,9 +30,11 @@ onMount(() => {
                 <p><strong>Email:</strong> {user.email}</p>
                 <p><strong>Vermindering:</strong> {user.reduction}</p>
             </div>
+            <button class="p-4 rounded-md bg-red-400" on:click={logout}>Uitloggen</button>
         {:else}
             <!-- Toon bericht als de gebruiker niet is ingelogd -->
-            <h2>{message}</h2>
+            <h2>U bent niet ingelogd!</h2>
+            <a href="/login"><button class="p-4 rounded-md bg-green-400">Login</button></a>
         {/if}
     </div>
 </Layout>

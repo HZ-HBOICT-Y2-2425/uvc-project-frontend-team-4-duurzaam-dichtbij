@@ -1,6 +1,19 @@
 <script>
+    // @ts-nocheck
     import { onMount } from "svelte";
-    import { goto } from '$app/navigation';
+    import { goto, afterNavigate } from '$app/navigation';
+    import Layout from "../layout.svelte";
+
+    const base = '/';
+    let previousPage = base;
+
+    afterNavigate(({from}) => {
+        console.log(base);
+        previousPage = from?.url.pathname || previousPage;
+        if (previousPage.toLocaleLowerCase() === window.location.pathname.toLocaleLowerCase() || previousPage.replace(' ', '') == '') {
+            previousPage = base;
+        }
+    })
 
     let username = '';
     let password = '';
@@ -9,12 +22,24 @@
     const users = [
         {
             id: 1,
-            name: 'Test User',
-            username: 't',
+            name: 'Henk de Vries',
+            username: 'a',
             password: 'p',
             email: 'testuser@example.com',
+            role: "admin",
+            level: 1,
             reduction: 5
-        }
+        },
+        {
+            id: 2,
+            name: 'Ria de Boer',
+            username: 'u',
+            password: 'p',
+            email: 'testuser@example.com',
+            role: "user",
+            level: 1,
+            reduction: 5
+        },
     ];
 
     function handleLogin() {
@@ -22,119 +47,39 @@
 
         if (user) {
             localStorage.setItem('user', JSON.stringify(user));
-            goto('/voortgang');
+            goto(previousPage);
         } else {
             errorMessage = 'Onjuiste gebruikersnaam of wachtwoord';
         }
     }
 
+    let ref = null;
     onMount(() => {
         errorMessage = '';
+        ref.focus();
     });
 </script>
 
-<div id="wrapper">
-    <div id="login-container">
-        <h2 class="heading">Inloggen</h2>
-
-        <div class="form-group">
-            <label for="username">Gebruikersnaam</label>
-            <input type="text" id="username" bind:value={username} placeholder="Gebruikersnaam" />
+<Layout>
+    <section class="flex justify-center items-center min-h-full bg-gray-100 p-5 box-border">
+        <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md text-center animate-fadeIn">
+            <h2 class="text-2xl text-gray-800 mb-5">Inloggen</h2>
+    
+            <div class="mb-5 text-left">
+                <label for="username" class="block text-sm font-bold text-gray-600 mb-2">Gebruikersnaam</label>
+                <input type="text" id="username" bind:this={ref} bind:value={username} placeholder="Gebruikersnaam" class="w-full p-3 border border-gray-300 rounded-lg text-base outline-none transition duration-300 focus:border-green-500 focus:shadow-outline-green"/>
+            </div>
+    
+            <div class="mb-5 text-left">
+                <label for="password" class="block text-sm font-bold text-gray-600 mb-2">Wachtwoord</label>
+                <input type="password" id="password" bind:value={password} placeholder="Wachtwoord" class="w-full p-3 border border-gray-300 rounded-lg text-base outline-none transition duration-300 focus:border-green-500 focus:shadow-outline-green" />
+            </div>
+    
+            <button type="submit" on:click={handleLogin} class="w-full p-3 bg-green-500 text-white text-base font-bold rounded-lg cursor-pointer transition duration-300 hover:bg-green-600">Inloggen</button>
+    
+            {#if errorMessage}
+                <p class="text-red-500 text-sm mt-4 font-bold">{errorMessage}</p>
+            {/if}
         </div>
-
-        <div class="form-group">
-            <label for="password">Wachtwoord</label>
-            <input type="password" id="password" bind:value={password} placeholder="Wachtwoord" />
-        </div>
-
-        <button on:click={handleLogin}>Inloggen</button>
-
-        {#if errorMessage}
-            <p class="error">{errorMessage}</p>
-        {/if}
-    </div>
-</div>
-
-<style>
-    /* Wrapper om de inhoud lokaal te centreren */
-    #wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh; /* Volledige hoogte van de viewport */
-        background-color: #f4f7fc;
-        padding: 20px; /* Voor kleinere schermen */
-        box-sizing: border-box;
-    }
-
-    #login-container {
-        width: 100%;
-        max-width: 400px;
-        padding: 25px;
-        background-color: white;
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        text-align: center;
-        animation: fadeIn 0.5s ease;
-    }
-
-    .heading {
-        font-size: 2rem;
-        color: #333;
-        margin-bottom: 20px;
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-        text-align: left;
-    }
-
-    .form-group label {
-        font-size: 0.9rem;
-        font-weight: bold;
-        color: #555;
-        margin-bottom: 8px;
-        display: block;
-    }
-
-    .form-group input {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        font-size: 1rem;
-        outline: none;
-        transition: all 0.3s ease;
-    }
-
-    .form-group input:focus {
-        border-color: #4caf50;
-        box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
-    }
-
-    button {
-        width: 100%;
-        padding: 12px;
-        background-color: #4caf50;
-        color: white;
-        font-size: 1rem;
-        font-weight: bold;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-        background-color: #45a049;
-    }
-
-    .error {
-        color: #f44336;
-        font-size: 0.9rem;
-        margin-top: 15px;
-        font-weight: bold;
-    }
-
-
-</style>
+    </section>
+</Layout>

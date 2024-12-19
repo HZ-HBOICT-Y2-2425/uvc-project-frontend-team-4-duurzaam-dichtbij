@@ -2,11 +2,23 @@
   // @ts-nocheck
   import { onMount } from "svelte";
   import { page } from "$app/stores"; // To access route parameters
-  import { goto } from "$app/navigation";
-    import Layout from "../../layout.svelte";
+  import { goto, afterNavigate } from '$app/navigation';
+  import Layout from "../../layout.svelte";
+
+  const base = '/';
+  let previousPage = base;
+
+  afterNavigate(({from}) => {
+      console.log(base);
+      previousPage = from?.url.pathname || previousPage;
+      if (previousPage.toLocaleLowerCase() === window.location.pathname.toLocaleLowerCase() || previousPage.replace(' ', '') == '') {
+          previousPage = base;
+      }
+  })
 
   let market = null; // Market data
   let error = null;
+  let storedUser = null;
 
   // Fetch market details
   const fetchMarketDetails = async (id) => {
@@ -86,6 +98,12 @@
   onMount(async () => {
     const marketId = $page.params.market;
     await fetchMarketDetails(marketId);
+    try {
+      storedUser = JSON.parse(localStorage.getItem('user')) || null;
+    } catch (error) {
+      console.warn("Geen geldige gebruiker gevonden:", error);
+      storedUser = null;
+    }
   });
 </script>
 
@@ -109,6 +127,7 @@
               class="bg-green-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-700 transition"
               >Deel</button
             >
+            {#if storedUser?.role === "admin"}
             {#if market.verified}
               <button
                 id="verify"
@@ -123,6 +142,7 @@
                 class="bg-green-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition"
                 >Verifieer</button
               >
+            {/if}
             {/if}
           </div>
         </div>
@@ -147,7 +167,7 @@
 
         <div class="mt-8 text-center flex justify-between">
           <a
-            href="/markten"
+            href="{previousPage}"
             class="bg-green-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition"
           >
             Terug

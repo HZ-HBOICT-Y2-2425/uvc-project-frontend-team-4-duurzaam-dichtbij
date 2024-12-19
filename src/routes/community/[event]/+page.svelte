@@ -1,8 +1,20 @@
 <script>
+    // @ts-nocheck
     import { onMount } from "svelte";
     import { page } from "$app/stores"; // To access route parameters
-    import { goto } from "$app/navigation";
+    import { goto, afterNavigate } from '$app/navigation';
   
+    const base = '/';
+    let previousPage = base;
+
+    afterNavigate(({from}) => {
+        console.log(base);
+        previousPage = from?.url.pathname || previousPage;
+        if (previousPage.toLocaleLowerCase() === window.location.pathname.toLocaleLowerCase() || previousPage.replace(' ', '') == '') {
+            previousPage = base;
+        }
+    })
+
     let event = null; // Market data
     let error = null;
   
@@ -69,7 +81,7 @@
         </div>
   
         <div class="mt-8 text-center flex justify-between">
-          <a href="/community" class="bg-green-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition">
+          <a href="{previousPage}" class="bg-green-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition">
             Terug
           </a>
           <a href="/community/{$page.params.event}/edit" class="bg-orange-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-orange-600 transition">
