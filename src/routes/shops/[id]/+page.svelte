@@ -89,6 +89,18 @@ const copyLink = () => {
                     </div>
                 </div>
 
+                <h2 class="text-lg font-semibold text-gray-700 mb-2">Aanbiedingen</h2>
+                <section class="bg-gray-100 p-4 rounded-lg mt-4 shadow-lg flex justify-between">
+                    
+                    {#if shop.promotions.description}
+                        <p class="text-gray-600">{shop.promotions.description}</p>
+                        <p>Tot {shop.promotions.endDate}</p>
+                    {:else}
+                        <p class="text-gray-600">Er zijn momenteel geen aanbiedingen.</p>
+                    {/if}
+
+                </section>
+
                 <div class="flex flex-wrap gap-6">
                     <div class="flex-1">
                         <h2 class="text-lg font-semibold text-gray-700 mb-2">Details</h2>
