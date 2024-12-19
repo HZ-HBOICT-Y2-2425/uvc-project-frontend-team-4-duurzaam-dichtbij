@@ -86,10 +86,6 @@ const updateShop = async () => {
             formData.append('image', newImage);
         }
 
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
-
         const response = await fetch(`http://localhost:3010/shops/shop/${shop.id}`, {
             method: "PUT",
             body: formData
