@@ -9,7 +9,7 @@
     let loading = true;
     let error = null;
 
-    let apiReference = getContext('apiReference');
+    const apiReference = getContext('apiReference');
     let apiUrl = `http://localhost:3011/recipes/${id}`;
 
     if (apiReference && apiReference.mainUrl) {
