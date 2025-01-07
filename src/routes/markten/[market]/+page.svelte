@@ -108,8 +108,11 @@
 </script>
 
 <Layout>
-  <div slot="sidebar-toggle-button"></div>
-  <main class="min-h-screen bg-gray-100 py-8 px-4">
+  <div class="fixed top-0 left-0 w-full h-full z-0">
+    <img src="../background.jpg" alt="Sustainability Background" class="w-full h-full object-cover opacity-50">
+    <div class="absolute top-0 left-0 w-full h-full bg-white opacity-20"></div>
+  </div>
+  <main class="relative py-8 px-4 z-10">
     {#if error}
       <p class="text-center text-red-500 font-medium">Error: {error}</p>
     {:else if !market}

@@ -20,56 +20,34 @@
 </script>
 
 <Layout>
-    <div slot="sidebar-toggle-button"></div>
-    <div id="profile-container">
-        {#if user} 
-            <!-- Toon profielinformatie als de gebruiker is ingelogd -->
-            <h2>Profiel</h2>
-            <div class="profile-info">
-                <p><strong>Naam:</strong> {user.name}</p>
-                <p><strong>Email:</strong> {user.email}</p>
-                <p><strong>Vermindering:</strong> {user.reduction}</p>
-            </div>
-            <button class="p-4 rounded-md bg-red-400" on:click={logout}>Uitloggen</button>
-        {:else}
-            <!-- Toon bericht als de gebruiker niet is ingelogd -->
-            <h2>U bent niet ingelogd!</h2>
-            <a href="/login"><button class="p-4 rounded-md bg-green-400">Login</button></a>
-        {/if}
+    <div class="fixed top-0 left-0 w-full h-full z-0">
+        <img src="../background.jpg" alt="Sustainability Background" class="w-full h-full object-cover opacity-50">
+        <div class="absolute top-0 left-0 w-full h-full bg-white opacity-20"></div>
     </div>
+    <main class="relative py-8 px-4 z-10">
+        {#if user}
+        <div class="max-w-4xl mx-auto flex justify-center items-center">
+            <h1 class="text-3xl mb-4 mx-auto">Goede{new Date().getHours() < 12 ? 'morgen' : new Date().getHours() < 18 ? 'middag' : new Date().getHours() < 22 ? 'avond' : 'nacht'}, {user.name}</h1>
+        </div>
+        {/if}
+        <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
+            {#if user} 
+                <!-- Toon profielinformatie als de gebruiker is ingelogd -->
+                <h2 class="text-3xl">Profiel</h2>
+                <div class="profile-info">
+                    <p><strong>Naam:</strong></p>
+                    <div class="bg-gray-200 rounded-full w-full p-2 mb-2">{user.name}</div>
+                    <p><strong>Email:</strong></p>
+                    <div class="bg-gray-200 rounded-full w-full p-2 mb-2">{user.email}</div>
+                    <p><strong>Vermindering:</strong></p>
+                    <div class="bg-gray-200 rounded-full w-full p-2 mb-2">{user.reduction}</div>
+                </div>
+                <button class="logout-button bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300" on:click={logout}>Uitloggen</button>
+            {:else}
+                <!-- Toon bericht als de gebruiker niet is ingelogd -->
+                <h2 class="text-red-500 text-xl">U bent niet ingelogd!</h2>
+                <a href="/login"><button class="login-button bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300">Login</button></a>
+            {/if}
+        </div>
+    </main>
 </Layout>
-
-<style>
-    /* Algemeen styling voor de pagina */
-    #profile-container {
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        text-align: center;
-    }
-
-    h2 {
-        color: #333;
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
-
-    .profile-info p {
-        font-size: 18px;
-        margin: 10px 0;
-        color: #555;
-    }
-
-    .profile-info strong {
-        color: #333;
-    }
-
-    /* Styling voor als de gebruiker niet is ingelogd */
-    #profile-container h2 {
-        color: #ff6347; /* Roodkleur voor foutmelding */
-        font-size: 22px;
-    }
-</style>

@@ -21,7 +21,7 @@
 
 <Layout>
     <div class="relative">
-        <img src="homepage-pic.jpg" alt="Sustainability Background" class="fixed top-0 left-0 w-full h-full object-cover z-0">
+        <img src="background.jpg" alt="Sustainability Background" class="fixed top-0 left-0 w-full h-full object-cover z-0">
         <div class="relative z-10 container mx-auto p-4">
             <div class="text-center my-8">
                 <h1 class="text-4xl font-bold">Duurzaam Dichtbij</h1>
