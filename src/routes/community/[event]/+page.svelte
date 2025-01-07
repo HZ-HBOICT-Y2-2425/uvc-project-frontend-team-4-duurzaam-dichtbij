@@ -446,7 +446,7 @@
                                 </button>
                               {/if}
                               <button 
-                                on:click={() => {comment.showEditOptions = false; comment.isEditingComment = false}}
+                                on:click={() => {comment.showEditOptions = false; comment.isEditingComment = false;}}
                                 class="bg-red-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-red-600 transition mt-3"
                               >
                                 Annuleer
@@ -535,7 +535,7 @@
                                   </button>
                                 {/if}
                                 <button 
-                                  on:click={() => {reply.showEditOptions = false; reply.isEditingReply = false}}
+                                  on:click={() => {reply.showEditOptions = false; reply.isEditingReply = false;}}
                                   class="bg-red-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-red-600 transition mt-3"
                                 >
                                   Annuleer
