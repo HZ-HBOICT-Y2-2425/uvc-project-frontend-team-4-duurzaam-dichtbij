@@ -13,7 +13,7 @@
         if (previousPage.toLocaleLowerCase() === window.location.pathname.toLocaleLowerCase() || previousPage.replace(' ', '') == '') {
             previousPage = base;
         }
-    })
+    });
 
     let username = '';
     let password = '';

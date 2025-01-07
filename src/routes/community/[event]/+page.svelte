@@ -13,7 +13,7 @@
         if (previousPage.toLocaleLowerCase() === window.location.pathname.toLocaleLowerCase() || previousPage.replace(' ', '') == '') {
             previousPage = base;
         }
-    })
+    });
 
     let event = null; // Market data
     let error = null;

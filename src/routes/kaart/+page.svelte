@@ -234,7 +234,7 @@
     const handleCheckboxClick = evt => {
         showClosed = evt.target.checked;
         handleSearch();
-    }
+    };
 
     /* Distance between two lat/lng coordinates in km using the Haversine formula */
     function getDistanceFromLatLng(lat1, lng1, lat2, lng2, miles) { // miles optional

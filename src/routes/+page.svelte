@@ -4,7 +4,7 @@
     import Layout from "./layout.svelte";
 
     let user = null;
-    let co2RequiredToLevelUp = 500;
+    const co2RequiredToLevelUp = 500;
     onMount(async () => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
