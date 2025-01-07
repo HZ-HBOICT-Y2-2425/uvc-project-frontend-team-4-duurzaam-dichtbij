@@ -28,6 +28,8 @@
   let applied = null; // Track applied status
   let comment = "";
 
+  let replyContent = "";
+
   // Load data on mount
   onMount(async () => {
     const eventId = $page.params.event;
@@ -423,18 +425,43 @@
                       <img class="w-10 h-10 rounded-full object-cover" alt="Profilepicture" src="/profile_picture.png" />
                       <div>
                         <p class="text-lg font-medium">{getUserNameById(comment.username)}</p>
+                        {#if comment.isEditingComment}
+                          <form
+                            on:submit|preventDefault={() => {
+                              updateComment(event.id, comment.id, { username: comment.username, content: comment.content });
+                              comment.isEditingComment = false;
+                            }}
+                          >
+                            <div class="flex space-x-2">
+                              <input
+                                bind:value={comment.content}
+                                class="border-2 border-black w-full bg-gray-100 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                              />
+                              {#if comment.content !== ""}
+                                <button
+                                  type="submit"
+                                  class="bg-green-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition mt-3"
+                                >
+                                  Opslaan
+                                </button>
+                              {/if}
+                              <button 
+                                on:click={() => {comment.showEditOptions = false; comment.isEditingComment = false}}
+                                class="bg-red-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-red-600 transition mt-3"
+                              >
+                                Annuleer
+                              </button>
+                            </div>
+                          </form>
+                        {:else}
                         <p>{comment.content}</p>
+                        {/if}
                       </div>
                     </div>
 
                     <div class="flex space-x-4 mt-2">
                       <button
-                        on:click={() => {
-                          const replyContent = prompt("Voer je reactie in:");
-                          if (replyContent) {
-                            createReply(event.id, comment.id, storedUser.id, replyContent);
-                          }
-                        }}
+                        on:click={() => {comment.isCreatingReply = true;}}
                         class="text-blue-500 hover:text-blue-600 transition"
                         title="Reageren"
                         aria-label="Reageren"
@@ -444,16 +471,83 @@
                       </svg>
                       </button>
                     </div>
+
+                    {#if comment.isCreatingReply}
+                      <form
+                        on:submit|preventDefault={() => {
+                        createReply(event.id, comment.id, storedUser.id, replyContent);
+                        comment.isCreatingReply = false;
+                       }}
+                      >
+                        <div class="flex space-x-2 pt-1.5">
+                          <input
+                            bind:value={replyContent}
+                            class="border-2 border-black w-full bg-gray-100 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                          />
+                          {#if replyContent == ""}
+                            <button
+                              type="button"
+                              class="bg-green-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition mt-3"
+                            >
+                              Opslaan
+                            </button>
+                          {:else}
+                            <button
+                              type="submit"
+                              class="bg-green-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition mt-3"
+                            >
+                              Opslaan
+                            </button>
+                          {/if}
+                          <button
+                            on:click={() => comment.isCreatingReply = false}
+                            class="bg-red-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-red-600 transition mt-3"
+                          >
+                            Annuleer
+                          </button>
+                        </div>
+                      </form>
+                    {/if}
                   
                     {#each comment.replies as reply}
                       <div class="ml-10 mt-3 flex space-x-3 relative">
                         <img class="w-8 h-8 rounded-full object-cover" alt="Reply Profilepicture" src="/profile_picture.png" />
                         <div>
                           <p class="text-md font-medium">{getUserNameById(reply.username)}</p>
-                          <p>{reply.content}</p>
+                          {#if reply.isEditingReply}
+                            <form
+                              on:submit|preventDefault={() => {
+                                updateReply(event.id, comment.id, reply.id, reply.username, reply.content);
+                                reply.isEditingReply = false;
+                              }}
+                            >
+                              <div class="flex space-x-2">
+                                <input
+                                  bind:value={reply.content}
+                                  class="border-2 border-black w-full bg-gray-100 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                                />
+                                {#if reply.content !== ""}
+                                  <button
+                                    type="submit"
+                                    class="bg-green-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition mt-3"
+                                  >
+                                    Opslaan
+                                  </button>
+                                {/if}
+                                <button 
+                                  on:click={() => {reply.showEditOptions = false; reply.isEditingReply = false}}
+                                  class="bg-red-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-red-600 transition mt-3"
+                                >
+                                  Annuleer
+                                </button>
+                              </div>
+                            </form>
+                          {:else}
+                            <p>{reply.content}</p>
+                          {/if}
                         </div>
                       
-                        {#if getUserNameById(reply.username) === storedUser.name}
+                        {#if getUserNameById(reply.username) === storedUser.name && !reply.isEditingReply}
                           <div class="absolute right-2">
                             <button 
                               on:click={() => (reply.showEditOptions = !reply.showEditOptions)} 
@@ -464,12 +558,7 @@
                             {#if reply.showEditOptions}
                               <div class="absolute right-0 top-8 bg-white shadow-lg rounded-lg p-2 space-y-2 z-10">
                                 <button
-                                  on:click={() => {
-                                    const newContent = prompt("De nieuwe reactie:", reply.content);
-                                    if (newContent !== null) {
-                                      updateReply(event.id, comment.id, reply.id, reply.username, newContent);
-                                    }
-                                  }}
+                                  on:click={() => {reply.isEditingReply = true;}}
                                   class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 rounded-lg"
                                 >
                                   Bewerken
@@ -488,7 +577,7 @@
                     {/each}
 
        
-                    {#if getUserNameById(comment.username) === storedUser.name}
+                    {#if getUserNameById(comment.username) === storedUser.name && !comment.isEditingComment}
                       <div class="absolute right-2">
                         <button 
                           on:click={() => (comment.showEditOptions = !comment.showEditOptions)} 
@@ -499,15 +588,7 @@
                         {#if comment.showEditOptions}
                           <div class="absolute right-0 top-8 bg-white shadow-lg rounded-lg p-2 space-y-2 z-10">
                             <button
-                              on:click={() => {
-                                const newContent = prompt("De nieuwe reactie:", comment.content);
-                                if (newContent !== null) { // Only update if the user didn't cancel
-                                  updateComment(event.id, comment.id, {
-                                    username: comment.username,
-                                    content: newContent,
-                                  });
-                                }
-                              }}
+                              on:click={() => {comment.isEditingComment = true;}}
                               class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 rounded-lg"
                             >
                               Bewerken
