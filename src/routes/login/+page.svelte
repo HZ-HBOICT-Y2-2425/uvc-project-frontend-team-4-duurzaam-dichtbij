@@ -38,7 +38,37 @@
             email: 'testuser@example.com',
             role: "user",
             level: 1,
-            reduction: 5
+            reduction: 7
+        },
+        {
+            id: 3,
+            name: 'Henk-Jan van Luiten',
+            username: 'u2',
+            password: 'p',
+            email: 'testuser@example.com',
+            role: "user",
+            level: 1,
+            reduction: 4
+        },
+        {
+            id: 4,
+            name: 'Marjan de Vries',
+            username: 'u3',
+            password: 'p',
+            email: 'testuser@example.com',
+            role: "user",
+            level: 1,
+            reduction: 9
+        },
+        {
+            id: 5,
+            name: 'Peter de Boer',
+            username: 'u4',
+            password: 'p',
+            email: 'testuser@example.com',
+            role: "user",
+            level: 1,
+            reduction: 14
         },
     ];
 
@@ -57,6 +87,7 @@
     onMount(() => {
         errorMessage = '';
         ref.focus();
+        localStorage.setItem('userList', JSON.stringify(users));
     });
 </script>
 
