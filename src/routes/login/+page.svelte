@@ -20,65 +20,54 @@
     let password = '';
     let errorMessage = '';
 
-
     const users = [
         {
             id: 1,
-            name: 'Henk de Vries',
+            name: 'Hans Overbeek',
             username: 'a',
             password: 'p',
-            email: 'testuser@example.com',
+            email: 'h.overbeek@zeelandnet.nl',
             role: "admin",
             level: 1,
-            reduction: 5
+            reduction: 349,
         },
         {
             id: 2,
-            name: 'Ria de Boer',
-            username: 'u',
+            name: 'Sanne de Graauw',
+            username: 's',
             password: 'p',
-            email: 'testuser@example.com',
-            role: "user",
+            email: 'sdg@graauw-agf.nl',
+            role: "storekeeper",
             level: 1,
-            reduction: 7
+            reduction: 81,
+            shopId: 1,
         },
         {
             id: 3,
-            name: 'Henk-Jan van Luiten',
-            username: 'u2',
+            name: 'Eric Peeters',
+            username: 'u',
             password: 'p',
-            email: 'testuser@example.com',
+            email: 'eric.peeters@gmail.com',
             role: "user",
-            level: 1,
-            reduction: 4
-        },
-        {
-            id: 4,
-            name: 'Marjan de Vries',
-            username: 'u3',
-            password: 'p',
-            email: 'testuser@example.com',
-            role: "user",
-            level: 1,
-            reduction: 9
-        },
-        {
-            id: 5,
-            name: 'Peter de Boer',
-            username: 'u4',
-            password: 'p',
-            email: 'testuser@example.com',
-            role: "user",
-            level: 1,
-            reduction: 14
+            level: 3,
+            reduction: 292,
         },
     ];
 
-    function handleLogin() {
+    async function handleLogin() {
         const user = users.find(u => u.username === username && u.password === password);
 
         if (user) {
-            localStorage.setItem('user', JSON.stringify(user));
+            if (user.shopId) {
+                const res = await fetch(`http://localhost:3010/shops/shop/${user.shopId}`);
+                if (res.ok) {
+                    const shop = await res.json();
+                    user.shop = shop;
+                    localStorage.setItem('user', JSON.stringify(user));
+                }
+            } else {
+                localStorage.setItem('user', JSON.stringify(user));
+            }
             goto(previousPage);
         } else {
             errorMessage = 'Onjuiste gebruikersnaam of wachtwoord';

@@ -121,7 +121,7 @@
 
       if (response.ok) {
         submissionResponse = "Event updated successfully!";
-        goto(`/community/${data.event.id}`);
+        goto(`/community`);
       } else {
         submissionResponse = `Error: ${response.statusText}`;
       }

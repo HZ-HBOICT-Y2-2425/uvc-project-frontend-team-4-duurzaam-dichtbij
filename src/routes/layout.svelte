@@ -32,9 +32,7 @@
         <li class="h-12 w-full flex items-center justify-center text-center md:w-auto md:px-2"><a href="/" class="no-underline text-inherit w-full h-full flex items-center justify-center">Home</a></li>
         <li class="h-12 w-full flex items-center justify-center text-center md:w-auto md:px-2"><a href="/kaart" class="no-underline text-inherit w-full h-full flex items-center justify-center">Kaart</a></li>
         <li class="h-12 w-full flex items-center justify-center text-center md:w-auto md:px-2"><a href="/recepten" class="no-underline text-inherit w-full h-full flex items-center justify-center">Recepten</a></li>
-        {#if user}
         <li class="h-12 w-full flex items-center justify-center text-center md:w-auto md:px-2"><a href="/markten" class="no-underline text-inherit w-full h-full flex items-center justify-center">Markten</a></li>
-        {/if}
         <li class="h-12 w-full flex items-center justify-center text-center md:w-auto md:px-2"><a href="/community" class="no-underline text-inherit w-full h-full flex items-center justify-center">Community</a></li>
         <li class="h-12 w-full flex items-center justify-center text-center md:w-auto md:px-2"><a href="/profiel" class="no-underline text-inherit w-full h-full flex items-center justify-center">Profiel</a></li>
     </ul>
