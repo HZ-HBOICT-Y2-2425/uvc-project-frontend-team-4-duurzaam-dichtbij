@@ -5,13 +5,34 @@
     import Progress from '$lib/components/Progress.svelte';
 
     let user = null;
+    let shops = null;
+    let shop = null;
     onMount(async () => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             user = JSON.parse(storedUser);
-            console.log(user.shop);
+            console.log(user.shopId);
         }
+        await fetchShops();
+        shop = shops.find(shop => shop.id === user.shopId);
+        console.log(shop);
     });
+
+    const fetchShops = async () => {
+    try {
+        const res = await fetch(`http://localhost:3010/shops/shops`);
+        if (res.ok) {
+            shops = await res.json();
+            console.log(shops);
+        } else {
+            console.error(`Could not load shops`, res.status);
+            shops = null; // Handle gracefully if the shop doesn't load
+        }
+    } catch (err) {
+        console.error(`Error fetching shops`, err);
+        shops = null; // Graceful fallback
+    }
+};
 
     function logout() {
         // Remove the user from localStorage and set isLoggedIn to false
@@ -58,20 +79,20 @@
                 <button class="logout-button bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300" on:click={logout}>Uitloggen</button>
             </div>
             <Progress class="max-w-2xl w-full" {user} />
-            {#if user.shop}
+            {#if shop}
             <div class="bg-white rounded-lg shadow-md p-6 max-w-2xl w-full">
                 <!-- Toon profielinformatie als de gebruiker is ingelogd -->
                 <h2 class="text-2xl font-bold text-center">Winkelhouder</h2>
                 <div class="store-info">
                     <p><strong>Naam:</strong></p>
-                    <div class="bg-gray-200 rounded-full w-full p-2 mb-2">{user.shop.name}</div>
+                    <div class="bg-gray-200 rounded-full w-full p-2 mb-2">{shop.name}</div>
                     <p><strong>Adres:</strong></p>
-                    <div class="bg-gray-200 rounded-full w-full p-2 mb-2">{user.shop.location.address}</div>
+                    <div class="bg-gray-200 rounded-full w-full p-2 mb-2">{shop.location.address}</div>
                     <p><strong>Plaats:</strong></p>
-                    <div class="bg-gray-200 rounded-full w-full p-2 mb-2">{user.shop.location.city}</div>
+                    <div class="bg-gray-200 rounded-full w-full p-2 mb-2">{shop.location.city}</div>
                 </div>
                 <button class="bg-green-500 rounded-lg text-white p-2 mt-2" on:click={openModal}>Bestel QR-Kaartjes</button>
-                <a href="/shops/{user.shop.id}/edit"><button class="bg-blue-500 rounded-lg text-white p-2 mt-2">Bewerk Winkel</button></a>
+                <a href="/shops/{shop.id}/edit"><button class="bg-blue-500 rounded-lg text-white p-2 mt-2">Bewerk Winkel</button></a>
             </div>
             {/if}
         </div>

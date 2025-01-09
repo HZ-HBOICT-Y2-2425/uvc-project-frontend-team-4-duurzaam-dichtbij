@@ -24,16 +24,7 @@
         const user = users.find(u => u.username === username && u.password === password);
 
         if (user) {
-            if (user.shopId) {
-                const res = await fetch(`http://localhost:3010/shops/shop/${user.shopId}`);
-                if (res.ok) {
-                    const shop = await res.json();
-                    user.shop = shop;
-                    localStorage.setItem('user', JSON.stringify(user));
-                }
-            } else {
-                localStorage.setItem('user', JSON.stringify(user));
-            }
+            localStorage.setItem('user', JSON.stringify(user));
             goto(previousPage);
         } else {
             errorMessage = 'Onjuiste gebruikersnaam of wachtwoord';
