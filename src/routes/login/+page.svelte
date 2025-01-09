@@ -20,11 +20,54 @@
     let password = '';
     let errorMessage = '';
 
-    function handleLogin() {
+    const users = [
+        {
+            id: 1,
+            name: 'Hans Overbeek',
+            username: 'a',
+            password: 'p',
+            email: 'h.overbeek@zeelandnet.nl',
+            role: "admin",
+            level: 1,
+            reduction: 349,
+        },
+        {
+            id: 2,
+            name: 'Sanne de Graauw',
+            username: 's',
+            password: 'p',
+            email: 'sdg@graauw-agf.nl',
+            role: "storekeeper",
+            level: 1,
+            reduction: 81,
+            shopId: 1,
+        },
+        {
+            id: 3,
+            name: 'Eric Peeters',
+            username: 'u',
+            password: 'p',
+            email: 'eric.peeters@gmail.com',
+            role: "user",
+            level: 3,
+            reduction: 292,
+        },
+    ];
+
+    async function handleLogin() {
         const user = users.find(u => u.username === username && u.password === password);
 
         if (user) {
-            localStorage.setItem('user', JSON.stringify(user));
+            if (user.shopId) {
+                const res = await fetch(`http://localhost:3010/shops/shop/${user.shopId}`);
+                if (res.ok) {
+                    const shop = await res.json();
+                    user.shop = shop;
+                    localStorage.setItem('user', JSON.stringify(user));
+                }
+            } else {
+                localStorage.setItem('user', JSON.stringify(user));
+            }
             goto(previousPage);
         } else {
             errorMessage = 'Onjuiste gebruikersnaam of wachtwoord';
