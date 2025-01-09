@@ -2,7 +2,7 @@
     // @ts-nocheck
     import { page } from "$app/stores";
     import { onMount, getContext } from "svelte";
-  import Layout from "../../layout.svelte";
+    import Layout from "../../layout.svelte";
     export let recipeUrl;
     const id = $page.params.id;
     let recipe = [];
@@ -16,7 +16,6 @@
         apiUrl = `${apiReference.mainUrl}${recipeUrl}`;
     }
 
-    console.log('API URL:', apiUrl);
 
     onMount(async () => {
         try {
@@ -48,8 +47,24 @@
         <!-- Hoofdvak: Titel, afbeelding en ingrediënten -->
         <div class="max-w-5xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
             <!-- Titel -->
+             
             <div class="text-center py-4 bg-gray-100">
                 <h2 class="text-4xl font-bold text-gray-800">{recipe.title}</h2>
+                <p class="text-gray-600">Bereidingstijd: {recipe.readyInMinutes} minuten</p>
+                <p class="text-gray-600">Porties: {recipe.servings}</p>
+            {#if recipe.dishTypes?.length > 0 || recipe.diets?.length > 0}
+            <div class="p-6 bg-gray-100 text-gray-600">
+                <h3 class="text-lg font-semibold">Categorieën:</h3>
+                <div class="flex flex-wrap space-x-2 mt-2">
+                    {#each recipe.dishTypes as type}
+                        <span class="bg-green-100 text-green-800 text-sm font-medium px-2 py-1 rounded">{type}</span>
+                    {/each}
+                    {#each recipe.diets as diet}
+                        <span class="bg-blue-100 text-blue-800 text-sm font-medium px-2 py-1 rounded">{diet}</span>
+                    {/each}
+                </div>
+            </div>
+            {/if}
             </div>
 
             <!-- Flex-container voor afbeelding en ingrediënten -->
@@ -85,6 +100,15 @@
                     </ol>
                 {:else}
                     <p class="text-gray-500">Geen instructies beschikbaar.</p>
+                {/if}
+            </div>
+
+            <div class="text-center py-2 bg-gray-50">
+                {#if recipe.spoonacularScore}
+                    <p class="text-yellow-500 text-lg font-bold">Score: {Math.round(recipe.spoonacularScore * 10) / 10} / 100</p>
+                {/if}
+                {#if recipe.aggregateLikes}
+                    <p class="text-gray-600">{recipe.aggregateLikes} mensen vinden dit recept leuk</p>
                 {/if}
             </div>
         </div>
