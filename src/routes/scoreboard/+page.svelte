@@ -42,11 +42,6 @@
 </Layout>
 
 <style>
-    main {
-        padding: 2rem;
-        font-family: Arial, sans-serif;
-        background-color: #f9f9f9;
-    }
     h2 {
         font-size: 2em;
         margin-bottom: 1em;
