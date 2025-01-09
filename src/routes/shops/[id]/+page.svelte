@@ -36,19 +36,19 @@ onMount(() => {
 });
 
 const fetchShop = async (id) => {
-    try {
-        const res = await fetch(`http://localhost:3010/shops/shop/${id}`);
-        if (res.ok) {
-            shop = await res.json();
-            console.log(shop);
-        } else {
-            console.error(`Could not load shop with id ${id}:`, res.status);
-            shop = null; // Handle gracefully if the shop doesn't load
-        }
-    } catch (err) {
-        console.error(`Error fetching shop with id ${id}:`, err);
-        shop = null; // Graceful fallback
+  try {
+    const res = await fetch(`http://localhost:3010/shops/shop/${id}`);
+    if (res.ok) {
+      shop = await res.json();
+      console.log('Shop details:', shop);
+    } else {
+      console.error(`Could not load shop with id ${id}:`, res.status);
+      shop = null;
     }
+  } catch (err) {
+    console.error(`Error fetching shop with id ${id}:`, err);
+    shop = null;
+  }
 };
 
 const deleteShop = async (id) => {
@@ -86,22 +86,21 @@ const copyLink = () => {
             </p>
         {:else}
             <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
-                <div class="flex justify-between">
-                    {#if shop.image}
-                        <img src="http://localhost:3010/shops/{shop.image}" alt={shop.name} class="mb-4 w-40 h-40">
-                    {:else}
-                        <img src="/profile_picture.png" alt={shop.name} class="mb-4 w-32 h-32">
-                    {/if}
-                    <h1 class="text-3xl font-bold text-gray-800 mb-4">{shop.name}</h1>
-                    <div class="space-x-1">
-                        <button
-                            id="copylink"
-                            on:click={copyLink}
-                            class="bg-green-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-700 transition"
-                        >Deel</button>
+                <div class="flex justify-between items-center mb-4">
+                    <div class="flex items-center space-x-4">
+                        {#if shop.image}
+                            <img src="http://localhost:3010/shops/{shop.image}" alt={shop.name} class="w-40 h-40 object-cover rounded-full">
+                        {:else}
+                            <img src="/profile_picture.png" alt={shop.name} class="w-32 h-32 object-cover rounded-full">
+                        {/if}
+                        <h1 class="text-3xl font-bold text-gray-800">{shop.name}</h1>
                     </div>
+                    <button
+                        id="copylink"
+                        on:click={copyLink}
+                        class="bg-green-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-700 transition"
+                    >Deel</button>
                 </div>
-
                 <h2 class="text-lg font-semibold text-gray-700 mb-2">Aanbiedingen</h2>
                 <section class="bg-gray-100 p-4 rounded-lg mt-4 shadow-lg flex justify-between">
                     
@@ -121,14 +120,24 @@ const copyLink = () => {
                             <li><strong>Adres:</strong> {shop.location.address}, {shop.location.city}</li>
                             <li><strong>Telefoon:</strong> {shop.phoneNumber}</li>
                         </ul>
-                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Betaalmethoden:</h3>
+                        <h3 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Betaalmethoden:</h3>
                         <ul class="text-gray-600 space-y-2">
                             {#each shop.payingMethods as method}
                                 <li>{method}</li>
                             {/each}
                         </ul>
+                        <h2 class="text-lg font-semibold text-gray-700 mt-4 mb-2">Producten:</h2>
+                        <ul class="text-gray-600 space-y-2">
+                            {#each shop.productList as product}
+                                {#if product}
+                                    <li>{product.fancyName}</li>
+                                {:else}
+                                    <li>Productinformatie niet beschikbaar</li>
+                                {/if}
+                            {/each}
+                        </ul>
                     </div>
-                    <div class="flex-1">
+                    <div>
                         <h2 class="text-lg font-semibold text-gray-700 mb-2">Openingstijden</h2>
                         <ul class="text-gray-600 space-y-2">
                             <li><strong>Maandag:</strong> {shop.openingHours.monday || "Gesloten"}</li>
@@ -142,7 +151,7 @@ const copyLink = () => {
                     </div>
                 </div>
 
-                <div class="mt-8 text-center flex justify-between">
+                <div class="mt-8 flex justify-between">
                     <a
                         href="{previousPage}"
                         class="bg-green-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition"
