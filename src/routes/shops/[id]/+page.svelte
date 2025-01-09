@@ -75,7 +75,7 @@ const copyLink = () => {
 <Layout>
     <div slot="sidebar-toggle-button"></div>
 
-    <main class="min-h-screen bg-gray-100 py-8 px-4">
+    <main class="min-h-screen bg-gray-100 py-8 px-4" style="background-image: url('/homepage-pic.jpg'); background-size: cover; ">
         {#if error}
             <p class="text-center text-red-500 font-medium">Error: {error}</p>
         {:else if !shop}
