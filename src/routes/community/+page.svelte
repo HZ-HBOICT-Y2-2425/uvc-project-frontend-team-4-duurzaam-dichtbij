@@ -79,7 +79,9 @@
                 <div class="w-full md:w-3/4 p-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                     {#if filteredEvents.length > 0}
                         {#each filteredEvents as event}
-                        <Event {event} />
+                        <div>
+                            <Event {event} />
+                        </div>
                         {/each}
                     {:else}
                         <p class="col-span-full text-center">Op dit moment zijn er geen evenementen van dit type gepland.</p>

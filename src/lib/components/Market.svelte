@@ -5,8 +5,8 @@
     export let market;
 </script>
 
-<a href="/markten/{market.id}" class="block pb-4">
-    <div class="bg-white shadow-lg rounded-lg p-4 hover:shadow-xl transition transform flex justify-between items-center">
+<a href="/markten/{market.id}">
+    <div class="bg-gray-200 shadow-lg rounded-lg p-4 hover:shadow-xl transition transform flex justify-between items-center">
         <div>
             <div class="flex">
                 <h2 class="text-xl font-bold text-gray-800 mb-2">{market.name}</h2>

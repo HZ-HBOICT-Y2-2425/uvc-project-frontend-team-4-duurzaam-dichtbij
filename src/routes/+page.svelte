@@ -2,9 +2,9 @@
     // @ts-nocheck
     import { onMount } from "svelte";
     import Layout from "./layout.svelte";
+    import Progress from "$lib/components/Progress.svelte";
 
     let user = null;
-    const co2RequiredToLevelUp = 500;
     onMount(async () => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
@@ -36,25 +36,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="flex flex-col items-center justify-center p-6 bg-white rounded-lg shadow-md text-center">
-                    <h2 class="text-2xl font-semibold mb-4">Voortgangsdetails</h2>
-                    <p class="text-lg text-gray-600 mb-5">Je voortgang wordt hier weergegeven op basis van je CO2-reductie.</p>
-                    {#if user !== null}
-                        <div class="text-center mb-5">
-                            <p class="text-xl font-semibold text-gray-800">Hallo, {user.name}!</p>
-                            <p class="text-lg text-gray-800">Je CO2-reductie is: <strong>{user.reduction}kg</strong></p>
-                            <p class="text-lg text-gray-800">Je bent nu level <strong>{user.level}</strong></p>
-                        </div>
-            
-                        <!-- Voortgangsbalk -->
-                        <div class="w-full h-5 bg-gray-300 rounded-full mb-5">
-                            <div class="h-full rounded-full bg-green-500" style="width: {(user.reduction / co2RequiredToLevelUp) * 100}%;"></div>
-                        </div>
-                        <a href="/voortgang"><button class="bg-green-500 text-white px-4 py-2 rounded-lg">Bekijk Voortgang</button></a>
-                    {:else}
-                        <a href="/login"><button class="bg-green-500 text-white px-4 py-2 rounded-lg">Inloggen</button></a>
-                    {/if}
-                </div>
+                <Progress {user}/>
 
                 <div class="flex flex-col items-center justify-center p-6 bg-white rounded-lg shadow-md text-center">
                     <h2 class="text-2xl font-semibold mb-4">Seizoensgroenten</h2>

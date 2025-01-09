@@ -7,7 +7,7 @@
     export let event;
 </script>
 
-<a href="/community/{event.id}" class="block">
+<a href="/community/{event.id}">
     <div class="flex justify-between bg-gray-200 shadow-lg rounded-lg p-4 hover:shadow-xl transition transform">
         <div>
             <h2 class="text-xl font-bold text-gray-800 mb-2">{event.name}</h2>
