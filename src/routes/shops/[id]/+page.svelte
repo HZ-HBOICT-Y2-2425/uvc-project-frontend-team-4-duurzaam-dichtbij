@@ -73,9 +73,11 @@ const copyLink = () => {
 </script>
 
 <Layout>
-    <div slot="sidebar-toggle-button"></div>
-
-    <main class="min-h-screen bg-gray-100 py-8 px-4">
+    <div class="fixed top-0 left-0 w-full h-full z-0">
+        <img src="../background.jpg" alt="Sustainability Background" class="w-full h-full object-cover opacity-50">
+        <div class="absolute top-0 left-0 w-full h-full bg-white opacity-20"></div>
+    </div>
+    <main class="relative py-8 px-4 z-10">
         {#if error}
             <p class="text-center text-red-500 font-medium">Error: {error}</p>
         {:else if !shop}
@@ -99,9 +101,20 @@ const copyLink = () => {
                         class="bg-green-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-700 transition"
                     >Deel</button>
                 </div>
+                <h2 class="text-lg font-semibold text-gray-700 mb-2">Aanbiedingen</h2>
+                <section class="bg-gray-100 p-4 rounded-lg mt-4 shadow-lg flex justify-between">
+                    
+                    {#if shop.promotions.description}
+                        <p class="text-gray-600">{shop.promotions.description}</p>
+                        <p>Tot {shop.promotions.endDate}</p>
+                    {:else}
+                        <p class="text-gray-600">Er zijn momenteel geen aanbiedingen.</p>
+                    {/if}
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
+                </section>
+
+                <div class="flex flex-wrap gap-6">
+                    <div class="flex-1">
                         <h2 class="text-lg font-semibold text-gray-700 mb-2">Details</h2>
                         <ul class="text-gray-600 space-y-2">
                             <li><strong>Adres:</strong> {shop.location.address}, {shop.location.city}</li>
@@ -126,7 +139,7 @@ const copyLink = () => {
                     </div>
                     <div>
                         <h2 class="text-lg font-semibold text-gray-700 mb-2">Openingstijden</h2>
-                        <ul class="opening-hours text-gray-600 space-y-2">
+                        <ul class="text-gray-600 space-y-2">
                             <li><strong>Maandag:</strong> {shop.openingHours.monday || "Gesloten"}</li>
                             <li><strong>Dinsdag:</strong> {shop.openingHours.tuesday || "Gesloten"}</li>
                             <li><strong>Woensdag:</strong> {shop.openingHours.wednesday || "Gesloten"}</li>
@@ -156,39 +169,3 @@ const copyLink = () => {
         {/if}
     </main>
 </Layout>
-
-<style>
-    main {
-        padding: 2rem;
-        font-family: Arial, sans-serif;
-        background-color: #f9f9f9;
-    }
-    h1 {
-        font-size: 2.5em;
-        margin-bottom: 0.5em;
-        color: #333;
-    }
-    h2 {
-        font-size: 1.5em;
-        margin-top: 1.5em;
-        margin-bottom: 0.5em;
-        color: #333;
-    }
-    ul {
-        list-style: none;
-        padding: 0;
-    }
-    .opening-hours li {
-        font-size: 1.1em;
-        margin-bottom: 0.5em;
-        color: #555;
-    }
-    .opening-hours li::before {
-        content: "•";
-        color: #000000;
-        font-weight: bold;
-        display: inline-block;
-        width: 1em;
-        margin-left: -1em;
-    }
-</style>

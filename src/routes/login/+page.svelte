@@ -20,7 +20,7 @@
     let password = '';
     let errorMessage = '';
 
-    function handleLogin() {
+    async function handleLogin() {
         const user = users.find(u => u.username === username && u.password === password);
 
         if (user) {
@@ -35,6 +35,7 @@
     onMount(() => {
         errorMessage = '';
         ref.focus();
+        localStorage.setItem('userList', JSON.stringify(users));
     });
 </script>
 
