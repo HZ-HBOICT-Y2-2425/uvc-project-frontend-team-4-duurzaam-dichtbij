@@ -18,7 +18,7 @@ afterNavigate(({from}) => {
     if (previousPage.toLocaleLowerCase() === window.location.pathname.toLocaleLowerCase() || previousPage.replace(' ', '') == '') {
         previousPage = base;
     }
-})
+});
 
 // Fetch shop data when the component mounts
 onMount(() => {
