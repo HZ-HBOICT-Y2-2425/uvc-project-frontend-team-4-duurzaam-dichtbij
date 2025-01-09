@@ -229,7 +229,7 @@
             return;
         }
         updateMap();
-    }
+    };
 
     const handleCheckboxClick = evt => {
         showClosed = evt.target.checked;

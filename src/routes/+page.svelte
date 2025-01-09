@@ -62,7 +62,7 @@
                     <li>Gemeente en lokale overheden</li>
                     <li>Vrijwilligers en supporters</li>
                 </ul>
-                <p class="text-lg text-gray-600 mt-5">Voor meer informatie, bezoek onze <a href="/about" class="text-green-500 underline">over ons</a> pagina.</p>
+                <p class="text-lg text-gray-600 mt-5">Voor meer informatie, contacteer ons op <a href="info@duurzaamdichtbij.nl" class="text-green-500 underline">info@duurzaamdichtbij.nl</a>.</p>
             </div>
         </div>
     </div>

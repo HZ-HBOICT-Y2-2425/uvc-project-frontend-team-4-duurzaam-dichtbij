@@ -3,6 +3,7 @@
     import { onMount } from "svelte";
     import { goto, afterNavigate } from '$app/navigation';
     import Layout from "../layout.svelte";
+    import { users } from "$lib/users";
 
     const base = '/';
     let previousPage = base;
