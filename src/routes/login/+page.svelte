@@ -20,40 +20,6 @@
     let password = '';
     let errorMessage = '';
 
-    const users = [
-        {
-            id: 1,
-            name: 'Hans Overbeek',
-            username: 'a',
-            password: 'p',
-            email: 'h.overbeek@zeelandnet.nl',
-            role: "admin",
-            level: 1,
-            reduction: 349,
-        },
-        {
-            id: 2,
-            name: 'Sanne de Graauw',
-            username: 's',
-            password: 'p',
-            email: 'sdg@graauw-agf.nl',
-            role: "storekeeper",
-            level: 1,
-            reduction: 81,
-            shopId: 1,
-        },
-        {
-            id: 3,
-            name: 'Eric Peeters',
-            username: 'u',
-            password: 'p',
-            email: 'eric.peeters@gmail.com',
-            role: "user",
-            level: 3,
-            reduction: 292,
-        },
-    ];
-
     async function handleLogin() {
         const user = users.find(u => u.username === username && u.password === password);
 

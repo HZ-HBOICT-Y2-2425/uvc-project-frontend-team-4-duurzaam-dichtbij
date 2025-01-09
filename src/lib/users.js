@@ -1,22 +1,33 @@
 export const users = [
     {
         id: 1,
-        name: 'Henk de Vries',
+        name: 'Hans Overbeek',
         username: 'a',
         password: 'p',
-        email: 'testuser@example.com',
+        email: 'h.overbeek@zeelandnet.nl',
         role: "admin",
         level: 1,
-        reduction: 5
+        reduction: 349,
     },
     {
         id: 2,
-        name: 'Ria de Boer',
+        name: 'Sanne de Graauw',
+        username: 's',
+        password: 'p',
+        email: 'sdg@graauw-agf.nl',
+        role: "storekeeper",
+        level: 1,
+        reduction: 81,
+        shopId: 1,
+    },
+    {
+        id: 3,
+        name: 'Eric Peeters',
         username: 'u',
         password: 'p',
-        email: 'testuser@example.com',
+        email: 'eric.peeters@gmail.com',
         role: "user",
-        level: 1,
-        reduction: 5
+        level: 3,
+        reduction: 292,
     },
 ];
