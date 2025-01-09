@@ -78,6 +78,7 @@
     onMount(() => {
         errorMessage = '';
         ref.focus();
+        localStorage.setItem('userList', JSON.stringify(users));
     });
 </script>
 
