@@ -76,7 +76,7 @@
             </div>
 
             <div class="mb-4">
-                <img src="community-img.jpg" alt="Market Background" class="w-full h-48 object-cover rounded-lg">
+                <img src="market-background.jpg" alt="Market Background" class="w-full h-48 object-cover rounded-lg ">
             </div>
 
             <div class="flex flex-wrap md:flex-nowrap">

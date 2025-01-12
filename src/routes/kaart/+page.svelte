@@ -3,7 +3,9 @@
     import { onMount } from "svelte";
     import "leaflet/dist/leaflet.css";
     import Layout from "../layout.svelte";
-  import { json } from "@sveltejs/kit";
+    import { json } from "@sveltejs/kit";
+    import { page } from "$app/stores";
+    import { get } from "svelte/store";
     
     let L = null; // Leaflet instance
     const points = []; // all points from api cached
@@ -17,9 +19,9 @@
 
     let userPoint = null; // user coordinates
     let userMarker = null; // user marker on map
-    
+
     let map;
-    console.log(selectedProducts);
+    
     onMount(async () => {
         // Import Leaflet dynamically to ensure it's loaded only on the client
         if (typeof window !== "undefined") {
@@ -44,8 +46,11 @@
         await fetchProducts();
         const shops = await fetchShops();
         const markets = await fetchMarkets();
-    
-        console.log(shops, markets);
+
+        // Fetch url params and update filtered products
+        const urlParams = new URLSearchParams(get(page).url.search);
+        const selectedProductIds = urlParams.getAll('product');
+        selectedProducts = selectedProductIds;
 
         // Process the points
         processPoints(shops, markets);
@@ -307,38 +312,40 @@
             <img src="https://www.svgrepo.com/download/521661/filter.svg" alt="Filter Icon" class="mr-2 w-6"> Filters
             </button>
         </div>
-        <div id="search-field" class="hidden field bg-white p-4 text-xl rounded shadow-lg absolute top-16 left-2 z-[2501]">
+        <div class="">
+            <div id="search-field" class="hidden field bg-white p-4 text-xl rounded shadow-lg absolute top-16 left-2 z-[2501]">
             <!-- HTML content for search field -->
             <button class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-[35px] font-bold" on:click={() => toggleField('')}>×</button>
             <input type="text" placeholder="Zoek..." bind:value={searchQuery} on:input={handleSearch}>
-        </div>
-        <div id="filters-field" class="hidden field bg-white p-4 text-xl rounded shadow-lg absolute top-16 left-2 z-[2502]">
+            </div>
+            <div id="filters-field" class="hidden field bg-white p-4 text-xl rounded shadow-lg absolute top-16 left-2 z-[2502] max-h-[calc(100vh-5rem)] overflow-y-auto">
             <!-- Sluitknop -->
             <button class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-[35px] font-bold" 
                 on:click={() => toggleField('')}>
                 ×
             </button>
-        
+            
             <!-- Afstand filter -->
             <input type="number" placeholder="Afstand... (km)" bind:value={maxDistance} on:input={handleSearch} class="mb-4">
-        
+            
             <!-- Gesloten winkels checkbox -->
             <div class="mb-4">
                 <input type="checkbox" checked={showClosed} on:input={handleCheckboxClick}>
                 <span>Gesloten winkels weergeven</span>
             </div>
-        
+            
             <!-- Productfilter -->
             <div class="mb-4">
                 <label for="product-select" class="block mb-2 font-bold">Filter op product:</label>
                 <div class="flex flex-col gap-2">
-                    {#each products as product}
-                        <label class="flex items-center">
-                            <input type="checkbox" bind:group={selectedProducts} value={product.id} on:change={handleSearch}>
-                            <span class="ml-2">{product.fancyName}</span>
-                        </label>
-                    {/each}
+                {#each products as product}
+                    <label class="flex items-center">
+                    <input type="checkbox" bind:group={selectedProducts} value={product.id} on:change={handleSearch}>
+                    <span class="ml-2">{product.fancyName}</span>
+                    </label>
+                {/each}
                 </div>
+            </div>
             </div>
         </div>
         <div id="map"></div>

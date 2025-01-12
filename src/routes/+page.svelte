@@ -13,10 +13,15 @@
     });
 
     const seasonalFood = [
-        { name: 'Appel', image: 'https://www.svgrepo.com/download/389680/vegetable-food-pepper.svg' },
-        { name: 'Peer', image: 'https://www.svgrepo.com/download/389663/fruit-food-pear.svg' },
-        { name: 'Wortel', image: 'https://www.svgrepo.com/download/389676/vegetable-food-carrot.svg' },
-    ];
+        'Aardappelen',
+        'Selderij',
+        'Pompoen',
+        'Prei',
+        'Rode kool',
+        'Witte kool',
+        'Spruiten',
+        'Wortel'
+    ]
 </script>
 
 <Layout>
@@ -30,7 +35,7 @@
 
             <div class="relative my-8">
                 <img src="homepage-map.jpg" alt="Map Background" class="w-full h-64 object-cover rounded-lg shadow-md">
-                <div class="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center">
+                <div class="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center rounded-lg">
                     <a href="/kaart"><button class="bg-green-500 text-white px-4 py-2 rounded-lg">Bekijk kaart</button></a>
                 </div>
             </div>
@@ -43,7 +48,7 @@
                     <p class="text-lg text-gray-600 mb-5">Deze producten zijn op dit moment in het seizoen:</p>
                     <ul class="text-left">
                         {#each seasonalFood as food}
-                            <li><img src={food.image} alt={food.name} class="w-6 inline mb-1.5 mr-1">{food.name}</li>
+                            <li>{food}</li>
                         {/each}
                     </ul>
                 </div>

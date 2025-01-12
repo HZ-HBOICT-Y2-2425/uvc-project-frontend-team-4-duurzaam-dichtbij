@@ -175,6 +175,7 @@
           >
             Terug
           </a>
+          {#if storedUser?.role === "admin"}
           <a
             href="/markten/{$page.params.market}/edit"
             class="bg-orange-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-orange-600 transition"
@@ -187,6 +188,7 @@
           >
             Verwijderen
           </button>
+          {/if}
         </div>
       </div>
     {/if}

@@ -14,7 +14,7 @@ let previousPage = base;
 
 afterNavigate(({from}) => {
     console.log(base);
-    previousPage = from?.url.pathname || previousPage;
+    previousPage = from?.url.pathname + from?.url.search || previousPage;
     if (previousPage.toLocaleLowerCase() === window.location.pathname.toLocaleLowerCase() || previousPage.replace(' ', '') == '') {
         previousPage = base;
     }

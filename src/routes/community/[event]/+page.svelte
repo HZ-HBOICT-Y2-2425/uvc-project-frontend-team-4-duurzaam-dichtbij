@@ -349,6 +349,7 @@
                 </button>
               {/if}
             {/if}
+            {#if storedUser?.role === "admin"}
             <a
               href="/community/{event.id}/edit"
               class="bg-orange-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-orange-600 transition"
@@ -361,6 +362,7 @@
             >
               Verwijderen
             </button>
+            {/if}
           </div>
         </div>
         <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">

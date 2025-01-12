@@ -10,12 +10,13 @@
     let error = null;
 
     const apiReference = getContext('apiReference');
-    let apiUrl = `http://localhost:3011/recipes/${id}`;
+    let apiUrl = `http://localhost:3010/recipes/recipes/${id}`;
 
     if (apiReference && apiReference.mainUrl) {
         apiUrl = `${apiReference.mainUrl}${recipeUrl}`;
     }
 
+    let kaartUrl = '/kaart?';
 
     onMount(async () => {
         try {
@@ -24,6 +25,19 @@
                 throw new Error("Failed to fetch recipe data");
             }
             recipe = await response.json();
+
+            const productResponse = await fetch(`http://localhost:3010/products/products`);
+            if (!productResponse.ok) {
+                throw new Error("Failed to fetch product data");
+            }
+            const products = await productResponse.json();
+            products.forEach(product => {
+                recipe.extendedIngredients.forEach(ingredient => {
+                    if (ingredient.name.toLowerCase() === product.name.toLowerCase()) {
+                        kaartUrl += `&product=${product.id}`;
+                    }
+                });
+            });
         } catch (err) {
             error = err.message;
         } finally {
@@ -86,6 +100,7 @@
                             <li>{ingredient.original}</li>
                         {/each}
                     </ul>
+                    <a href={kaartUrl}><button class="rounded-lg p-4 bg-green-500 text-white mt-2 hover:shadow-md">Bekijk winkels met aanbod</button></a>
                 </div>
             </div>
 
