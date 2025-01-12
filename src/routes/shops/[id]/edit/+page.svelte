@@ -36,7 +36,6 @@ let newImage = null;
 
 // Fetch shop data when the component mounts
 onMount(() => {
-    console.log('Edit page loaded');
     // Subscribe to $page to react to route changes
     const unsubscribe = page.subscribe(async ($page) => {
         const params = $page.params;

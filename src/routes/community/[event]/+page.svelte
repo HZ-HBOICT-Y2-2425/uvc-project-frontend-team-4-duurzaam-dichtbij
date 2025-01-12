@@ -10,7 +10,6 @@
   let previousPage = base;
 
   afterNavigate(({ from }) => {
-    console.log(base);
     previousPage = from?.url.pathname || previousPage;
     if (
       previousPage.toLocaleLowerCase() ===

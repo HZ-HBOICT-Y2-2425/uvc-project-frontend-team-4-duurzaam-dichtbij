@@ -175,8 +175,7 @@
             map.removeLayer(marker);
         });
         currentMarkers = [];
-        console.log(selectedProducts)
-        console.log(points)
+        
         points
             .filter(point => searchQuery ? point.name.toLowerCase().startsWith(searchQuery.toLowerCase()) : true)
             .filter(point => maxDistance ? getDistanceFromLatLng(point.lat, point.lng, userPoint.lat, userPoint.lng) <= maxDistance : 1000)

@@ -11,11 +11,9 @@
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             user = JSON.parse(storedUser);
-            console.log(user.shopId);
         }
         await fetchShops();
         shop = shops.find(shop => shop.id === user.shopId);
-        console.log(shop);
     });
 
     const fetchShops = async () => {
@@ -23,7 +21,6 @@
         const res = await fetch(`http://localhost:3010/shops/shops`);
         if (res.ok) {
             shops = await res.json();
-            console.log(shops);
         } else {
             console.error(`Could not load shops`, res.status);
             shops = null; // Handle gracefully if the shop doesn't load

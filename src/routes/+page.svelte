@@ -21,7 +21,7 @@
         'Witte kool',
         'Spruiten',
         'Wortel'
-    ]
+    ];
 </script>
 
 <Layout>

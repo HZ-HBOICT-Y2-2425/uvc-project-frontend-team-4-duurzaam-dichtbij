@@ -46,7 +46,6 @@ const fetchShop = async (id) => {
     const res = await fetch(`http://localhost:3010/shops/shop/${id}`);
     if (res.ok) {
       shop = await res.json();
-      console.log('Shop details:', shop);
     } else {
       console.error(`Could not load shop with id ${id}:`, res.status);
       shop = null;
