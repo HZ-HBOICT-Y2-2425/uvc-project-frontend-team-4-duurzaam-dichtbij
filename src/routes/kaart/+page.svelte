@@ -3,13 +3,15 @@
     import { onMount } from "svelte";
     import "leaflet/dist/leaflet.css";
     import Layout from "../layout.svelte";
+  import { json } from "@sveltejs/kit";
     
     let L = null; // Leaflet instance
     const points = []; // all points from api cached
     let currentMarkers = []; // all loaded markers
 
     let searchQuery = ''; // current search query
-    //let products = []; // products that shops must sell to show
+    let products = []; // products that shops must sell to show
+    let selectedProducts = []; // selected product
     let maxDistance = undefined; // distance in km
     let showClosed = true; // closed shops are shown too
 
@@ -17,7 +19,7 @@
     let userMarker = null; // user marker on map
     
     let map;
-    
+    console.log(selectedProducts);
     onMount(async () => {
         // Import Leaflet dynamically to ensure it's loaded only on the client
         if (typeof window !== "undefined") {
@@ -39,6 +41,7 @@
         getUserLocation();
 
         // Fetch shop and market data
+        await fetchProducts();
         const shops = await fetchShops();
         const markets = await fetchMarkets();
     
@@ -100,6 +103,7 @@
                 lat: shop.lat,
                 lng: shop.lng,
                 open: isOpen(shop.openingHours),
+                products: shop.products
             }));
         } catch (error) {
             console.error("Could not load shops:", error);
@@ -133,28 +137,30 @@
     
     // Geocode points
     function processPoints(shops, markets) {
-        for (const shop of shops) {
-            points.push({
-                name: shop.name,
-                popup: `<b>${shop.name}</b><br><a href="/shops/${shop.id}">Meer informatie</a>`,
-                icon: "shop_icon.png",
-                lat: shop.lat,
-                lng: shop.lng,
-                open: shop.open,
-            });
-        }
-    
-        for (const market of markets) {
-            points.push({
-                name: market.name,
-                popup: `<b>${market.name}</b><br>${market.description}<br><a href="/markten/${market.id}">Meer informatie</a>`,
-                icon: "market_icon.png",
-                lat: market.lat,
-                lng: market.lng,
-                open: true,
-            });
-        }
+    for (const shop of shops) {
+        points.push({
+            name: shop.name,
+            popup: `<b>${shop.name}</b><br><a href="/shops/${shop.id}">Meer informatie</a>`,
+            icon: "shop_icon.png",
+            lat: shop.lat,
+            lng: shop.lng,
+            open: shop.open,
+            products: shop.products 
+        });
     }
+
+    for (const market of markets) {
+        points.push({
+            name: market.name,
+            popup: `<b>${market.name}</b><br>${market.description}<br><a href="/markten/${market.id}">Meer informatie</a>`,
+            icon: "market_icon.png",
+            lat: market.lat,
+            lng: market.lng,
+            open: true,
+            products: undefined
+        });
+    }
+}
     
     // Update markers on the map
     function updateMap() {
@@ -164,11 +170,13 @@
             map.removeLayer(marker);
         });
         currentMarkers = [];
-    
+        console.log(selectedProducts)
+        console.log(points)
         points
             .filter(point => searchQuery ? point.name.toLowerCase().startsWith(searchQuery.toLowerCase()) : true)
             .filter(point => maxDistance ? getDistanceFromLatLng(point.lat, point.lng, userPoint.lat, userPoint.lng) <= maxDistance : 1000)
             .filter(point => closedVisible ? true : point.open)
+            .filter(point => point.products == undefined || selectedProducts.length == 0 || selectedProducts.some(productId => point.products.includes(productId)))
             .forEach(point => {
                 const icon = L.icon({
                     iconUrl: point.icon,
@@ -263,6 +271,16 @@
             fieldElement.classList.toggle('hidden');
         }
     }
+
+    async function fetchProducts() {
+    try {
+        const res = await fetch('http://localhost:3013/products/'); // Pas de endpoint aan naar jouw backend
+        const json = await res.json();
+        products = json;  
+    } catch (error) {
+        console.error("Could not load products:", error);
+    }
+}
 </script>
 
 <Layout>
@@ -295,12 +313,32 @@
             <input type="text" placeholder="Zoek..." bind:value={searchQuery} on:input={handleSearch}>
         </div>
         <div id="filters-field" class="hidden field bg-white p-4 text-xl rounded shadow-lg absolute top-16 left-2 z-[2502]">
-            <!-- HTML content for filters field -->
-            <button class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-[35px] font-bold" on:click={() => toggleField('')}>×</button>
-            <input type="number" placeholder="Afstand... (km)" bind:value={maxDistance} on:input={handleSearch}>
-            <div>
-            <input type="checkbox" checked={showClosed} on:input={handleCheckboxClick}>
-            <span>Gesloten winkels weergeven</span>
+            <!-- Sluitknop -->
+            <button class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-[35px] font-bold" 
+                on:click={() => toggleField('')}>
+                ×
+            </button>
+        
+            <!-- Afstand filter -->
+            <input type="number" placeholder="Afstand... (km)" bind:value={maxDistance} on:input={handleSearch} class="mb-4">
+        
+            <!-- Gesloten winkels checkbox -->
+            <div class="mb-4">
+                <input type="checkbox" checked={showClosed} on:input={handleCheckboxClick}>
+                <span>Gesloten winkels weergeven</span>
+            </div>
+        
+            <!-- Productfilter -->
+            <div class="mb-4">
+                <label for="product-select" class="block mb-2 font-bold">Filter op product:</label>
+                <div class="flex flex-col gap-2">
+                    {#each products as product}
+                        <label class="flex items-center">
+                            <input type="checkbox" bind:group={selectedProducts} value={product.id} on:change={handleSearch}>
+                            <span class="ml-2">{product.fancyName}</span>
+                        </label>
+                    {/each}
+                </div>
             </div>
         </div>
         <div id="map"></div>
