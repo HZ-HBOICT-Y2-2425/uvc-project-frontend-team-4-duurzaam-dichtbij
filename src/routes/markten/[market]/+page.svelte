@@ -2,11 +2,22 @@
   // @ts-nocheck
   import { onMount } from "svelte";
   import { page } from "$app/stores"; // To access route parameters
-  import { goto } from "$app/navigation";
-    import Layout from "../../layout.svelte";
+  import { goto, afterNavigate } from '$app/navigation';
+  import Layout from "../../layout.svelte";
+
+  const base = '/';
+  let previousPage = base;
+
+  afterNavigate(({from}) => {
+      previousPage = from?.url.pathname || previousPage;
+      if (previousPage.toLocaleLowerCase() === window.location.pathname.toLocaleLowerCase() || previousPage.replace(' ', '') == '') {
+          previousPage = base;
+      }
+  });
 
   let market = null; // Market data
   let error = null;
+  let storedUser = null;
 
   // Fetch market details
   const fetchMarketDetails = async (id) => {
@@ -86,12 +97,21 @@
   onMount(async () => {
     const marketId = $page.params.market;
     await fetchMarketDetails(marketId);
+    try {
+      storedUser = JSON.parse(localStorage.getItem('user')) || null;
+    } catch (error) {
+      console.warn("Geen geldige gebruiker gevonden:", error);
+      storedUser = null;
+    }
   });
 </script>
 
 <Layout>
-  <div slot="sidebar-toggle-button"></div>
-  <main class="min-h-screen bg-gray-100 py-8 px-4">
+  <div class="fixed top-0 left-0 w-full h-full z-0">
+    <img src="../background.jpg" alt="Sustainability Background" class="w-full h-full object-cover opacity-50">
+    <div class="absolute top-0 left-0 w-full h-full bg-white opacity-20"></div>
+  </div>
+  <main class="relative py-8 px-4 z-10">
     {#if error}
       <p class="text-center text-red-500 font-medium">Error: {error}</p>
     {:else if !market}
@@ -109,6 +129,7 @@
               class="bg-green-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-700 transition"
               >Deel</button
             >
+            {#if storedUser?.role === "admin"}
             {#if market.verified}
               <button
                 id="verify"
@@ -123,6 +144,7 @@
                 class="bg-green-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition"
                 >Verifieer</button
               >
+            {/if}
             {/if}
           </div>
         </div>
@@ -147,11 +169,12 @@
 
         <div class="mt-8 text-center flex justify-between">
           <a
-            href="/markten"
+            href="{previousPage}"
             class="bg-green-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition"
           >
             Terug
           </a>
+          {#if storedUser?.role === "admin"}
           <a
             href="/markten/{$page.params.market}/edit"
             class="bg-orange-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-orange-600 transition"
@@ -164,6 +187,7 @@
           >
             Verwijderen
           </button>
+          {/if}
         </div>
       </div>
     {/if}

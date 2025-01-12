@@ -1,132 +1,127 @@
 <script>
-// @ts-nocheck
-
-    import { onMount } from "svelte";
-    import Layout from "../layout.svelte";
-
-    let user = null;
-    let reduction = 0;
-    let rewardMessage = '';
-
-    // Zorg ervoor dat de gebruiker wordt geladen bij het laden van de pagina
-    onMount(() => {
-        const storedUser = localStorage.getItem('user');
+    // @ts-nocheck
+    
+        import { onMount } from "svelte";
+        import Layout from "../layout.svelte";
+        import { Card, Toggle } from 'flowbite-svelte';
         
-        if (storedUser) {
-            user = JSON.parse(storedUser);  // Haal de opgeslagen gebruiker op
-            reduction = user.reduction;  // Stel de voortgang in op basis van de CO2-reductie
-            setRewardMessage(reduction); // Update de beloningstekst op basis van de voortgang
-        } else {
-            console.log('Geen gebruiker gevonden in localStorage');
+        let showModal = false;
+        let selectedCard = null;
+    
+        const cardRequirements = {
+            card1: 3,
+            card2: 4,
+            card3: 5,
+            card4: 6
+        };
+    
+        const modalTexts = {
+            card1: "je krijgt 5% korting op je volgende aankoop",
+            card2: "je krijgt 5% korting op je volgende aankoop",
+            card3: "je krijgt 10% korting op je volgende aankoop",
+            card4: "je krijgt 15% korting op je volgende aankoop",
+        };
+    
+        const cardTitles = {
+            card1: "unlock level 3",
+            card2: "unlock level 4",
+            card3: "unlock level 5",
+            card4: "unlock level 6"
+        };
+    
+        let user = null;
+        onMount(async () => {
+            const storedUser = localStorage.getItem('user');
+            if (storedUser) {
+                user = JSON.parse(storedUser);
+                
+                if (user.reduction >= 500) {
+                    user.level += 1;
+                    user.reduction -= 500;
+                    localStorage.setItem('user', JSON.stringify(user));
+                }
+            }
+        });
+    
+        function openModal(cardId) {
+            const requiredLevel = cardRequirements[cardId];
+            if (user && user.level >= requiredLevel) {
+                selectedCard = cardId;
+                showModal = true;
+            }
         }
-    });
-
-    // Functie om de beloningstekst in te stellen afhankelijk van de voortgang
-    function setRewardMessage(reduction) {
-        if (reduction >= 150) {
-            rewardMessage = 'Fantastisch! Je hebt 150% reductie bereikt!';
-        } else if (reduction >= 100) {
-            rewardMessage = 'Goed gedaan! Je hebt 100% reductie bereikt!';
-        } else if (reduction > 0) {
-            rewardMessage = `Je hebt ${reduction}% reductie bereikt. Ga zo door!`;
-        } else {
-            rewardMessage = 'Je hebt nog geen CO2-reductie bereikt. Start nu!';
+    
+        function closeModal() {
+            showModal = false;
+            selectedCard = null;
         }
-    }
-</script>
-
-<Layout>
-    <div slot="sidebar-toggle-button"></div>
-    <div class="content-container">
-        <h3 class="details-title">Voortgangsdetails</h3>
-        <p class="details-text">Je voortgang wordt hier weergegeven op basis van je CO2-reductie.</p>
-
-        <!-- Check of de gebruiker ingelogd is en toon de voortgang -->
-        {#if user}
-            <div class="user-info">
-                <p class="greeting">Hallo, {user.name}!</p>
-                <p class="reduction-info">Je CO2-reductie is: <strong>{reduction}%</strong></p>
+    </script>
+    
+    <Layout>
+        <div class="relative">
+            <button class="absolute top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-md text-lg" on:click={() => window.location.href = 'http://localhost:5173/scoreboard'}>
+                Naar Scoreboard
+            </button>
+            <div class="flex flex-col items-center justify-start p-8 bg-gray-100 rounded-lg shadow-lg">
+                <div class="w-full mb-10 flex-grow">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-2">Voortgangsdetails</h3>
+                    <p class="text-lg text-gray-600 mb-5">Je voortgang wordt hier weergegeven op basis van je CO2-reductie.</p>
+        
+                    {#if user}
+                        <div class="text-center mb-5">
+                            <p class="text-xl font-bold text-gray-800">Hallo, {user.name}!</p>
+                            <p class="text-lg text-gray-800">Je Level is: <strong>{user.level}</strong></p>
+                        </div>
+        
+                        <div class="w-full h-5 bg-gray-200 rounded-full my-5">
+                            <div class="h-full rounded-full bg-green-500" style="width: {Math.round((user.reduction/500)*100)}%;"></div>
+                        </div>
+        
+                        <p class="text-lg text-green-600 font-medium">Je hebt {((user.level-1) * 500) + user.reduction}kg CO2 bespaard.</p>
+                    {:else}
+                        <p class="text-lg text-red-600 font-medium">Je bent niet ingelogd. Log in om je voortgang te bekijken.</p>
+                    {/if}
+                </div>
+        
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    {#each Object.keys(cardRequirements) as cardId}
+                        <div class="relative mb-5 cursor-pointer" role="button" tabindex="0" on:click={() => openModal(cardId)} on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') openModal(cardId); }} aria-label="Bekijk details voor {cardId}">
+                            <div class="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:-translate-y-1 hover:shadow-xl">
+                                <div class="flex flex-col items-center">
+                                    <img class="w-full h-52 object-cover" src="src\routes\voortgang\korting.jpg" alt="{cardId}">
+                                    <div class="p-5 text-center">
+                                        <h5 class="text-xl font-semibold text-gray-800">{cardTitles[cardId]}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            {#if user && user.level < cardRequirements[cardId]}
+                                <div class="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center">
+                                    <span class="text-4xl text-red-600">✖</span>
+                                </div>
+                            {/if}
+                        </div>
+                    {/each}
+        
+                    {#if showModal}
+                        <!-- svelte-ignore a11y_click_events_have_key_events -->
+                        <!-- svelte-ignore a11y_no_static_element_interactions -->
+                        <div class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 animate-fadeIn" on:click={closeModal}>
+                            <div class="bg-white p-6 rounded-lg w-4/5 max-w-lg shadow-lg" on:click|stopPropagation>
+                                <h2 class="text-2xl font-bold text-gray-800 mb-3">KORTING</h2>
+                                <p class="text-lg text-gray-800 mb-5">{modalTexts[selectedCard]}</p>
+                                <button class="bg-red-600 text-white px-4 py-2 rounded-md text-lg" on:click={closeModal}>Sluiten</button>
+                            </div>
+                        </div>
+                    {/if}
+                </div>
             </div>
-
-            <!-- Voortgangsbalk -->
-            <div class="progress-bar-container">
-                <div class="progress-bar" style="width: {reduction}%;"></div>
-            </div>
-
-            <p class="reward-message">{rewardMessage}</p>
-        {:else}
-            <p class="error-message">Je bent niet ingelogd. Log in om je voortgang te bekijken.</p>
-        {/if}
-    </div>
-</Layout>
-
-<style>
-    .content-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        text-align: center;
-    }
-
-    .details-title {
-        font-size: 1.8rem;
-        color: #333;
-        margin-bottom: 15px;
-    }
-
-    .details-text {
-        font-size: 1.1rem;
-        color: #555;
-        margin-bottom: 20px;
-    }
-
-    .user-info {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .greeting {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: #333;
-    }
-
-    .reduction-info {
-        font-size: 1.2rem;
-        color: #333;
-    }
-
-    .progress-bar-container {
-        width: 100%;
-        height: 20px;
-        background-color: #e0e0e0;
-        border-radius: 10px;
-        margin: 20px 0;
-    }
-
-    .progress-bar {
-        height: 100%;
-        border-radius: 10px;
-        background-color: #4caf50;
-    }
-
-    .reward-message {
-        font-size: 1.2rem;
-        color: #4caf50;
-        font-weight: 500;
-    }
-
-    .error-message {
-        font-size: 1.2rem;
-        color: #f44336;
-        font-weight: 500;
-    }
-</style>
+        </div>
+    </Layout>
+    
+    <style>
+        h2 {
+            font-size: 2em;
+            margin-bottom: 1em;
+            color: #333;
+        }
+    </style>

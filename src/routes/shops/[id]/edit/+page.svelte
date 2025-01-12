@@ -25,14 +25,17 @@ let form = {
         sunday: ''
     },
     payingMethods: [],
-    image: ''
+    image: '',
+    promotions: {
+        description: '',
+        endDate: ''
+    }
 };
 let newPayingMethod = '';
 let newImage = null;
 
 // Fetch shop data when the component mounts
 onMount(() => {
-    console.log('Edit page loaded');
     // Subscribe to $page to react to route changes
     const unsubscribe = page.subscribe(async ($page) => {
         const params = $page.params;
@@ -76,6 +79,8 @@ const updateShop = async () => {
         formData.append('openingHours[saturday]', form.openingHours.saturday);
         formData.append('openingHours[sunday]', form.openingHours.sunday);
         formData.append('payingMethods', JSON.stringify(form.payingMethods));
+        formData.append('promotions[description]', form.promotions.description);
+        formData.append('promotions[endDate]', form.promotions.endDate);
         if (newImage) {
             formData.append('image', newImage);
         }
@@ -119,7 +124,7 @@ const handleImageChange = (event) => {
         <p>This is specific to the shop edit page.</p>
     </div>
 
-    <main class="min-h-screen bg-gray-100 py-8 px-4">
+    <main class="min-h-screen bg-gray-100 py-8 px-4" style="background-image: url('/homepage-pic.jpg'); background-size: cover; ">
         {#if error}
             <p class="text-center text-red-500 font-medium">Error: {error}</p>
         {:else if !shop}
@@ -131,7 +136,13 @@ const handleImageChange = (event) => {
                 <h1 class="text-3xl font-bold text-gray-800 mb-4">Bewerk Winkel</h1>
                 <form on:submit|preventDefault={updateShop}>
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Naam</label>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
+                            Naam
+                            <span class="tooltip">
+                                <strong class="text-red-600">*</strong>
+                                <span class="tooltiptext">Dit veld mag niet leeg zijn</span>
+                            </span>
+                        </label>
                         <input
                             type="text"
                             id="name"
@@ -140,7 +151,13 @@ const handleImageChange = (event) => {
                         />
                     </div>
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="city">Stad</label>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="city">
+                            Stad
+                            <span class="tooltip">
+                                <strong class="text-red-600">*</strong>
+                                <span class="tooltiptext">Dit veld mag niet leeg zijn</span>
+                            </span>
+                        </label>
                         <input
                             type="text"
                             id="city"
@@ -149,7 +166,13 @@ const handleImageChange = (event) => {
                         />
                     </div>
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="address">Adres</label>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="address">
+                            Adres
+                            <span class="tooltip">
+                                <strong class="text-red-600">*</strong>
+                                <span class="tooltiptext">Dit veld mag niet leeg zijn</span>
+                            </span>
+                        </label>
                         <input
                             type="text"
                             id="address"
@@ -163,6 +186,15 @@ const handleImageChange = (event) => {
                             type="text"
                             id="phoneNumber"
                             bind:value={form.phoneNumber}
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="image">Afbeelding</label>
+                        <input
+                            type="file"
+                            id="image"
+                            on:change={handleImageChange}
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                     </div>
@@ -199,16 +231,31 @@ const handleImageChange = (event) => {
                         </ul>
                     </div>
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="image">Afbeelding</label>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="promotionsDescription">Aanbieding Beschrijving</label>
                         <input
-                            type="file"
-                            id="image"
-                            on:change={handleImageChange}
+                            type="text"
+                            id="promotionsDescription"
+                            bind:value={form.promotions.description}
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                     </div>
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="openingHours">Openingstijden</label>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="promotionsEndDate">Aanbieding Einddatum</label>
+                        <input
+                            type="text"
+                            id="promotionsEndDate"
+                            bind:value={form.promotions.endDate}
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="openingHours">
+                            Openingstijden
+                            <span class="tooltip">
+                                <strong class="text-red-600">*</strong>
+                                <span class="tooltiptext">Dit veld mag niet leeg zijn</span>
+                            </span>
+                        </label>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-gray-700 text-sm font-bold mb-2" for="monday">Maandag</label>
@@ -312,5 +359,30 @@ const handleImageChange = (event) => {
     }
     input {
         margin-bottom: 1em;
+    }
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+    }
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 200px;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%; /* Position the tooltip above the text */
+        left: 50%;
+        margin-left: -100px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
     }
 </style>

@@ -71,7 +71,7 @@
 
       if (response.ok) {
         submissionResponse = "Markt succesvol bijgewerkt!";
-        goto(`/markten/${data.market.id}`);
+        goto(`/markten`);
       } else {
         submissionResponse = `Fout: ${response.statusText}`;
       }
