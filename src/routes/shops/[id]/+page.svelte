@@ -12,8 +12,9 @@ let error = null;
 const base = '/';
 let previousPage = base;
 
+let user;
+
 afterNavigate(({from}) => {
-    console.log(base);
     previousPage = from?.url.pathname + from?.url.search || previousPage;
     if (previousPage.toLocaleLowerCase() === window.location.pathname.toLocaleLowerCase() || previousPage.replace(' ', '') == '') {
         previousPage = base;
@@ -22,7 +23,12 @@ afterNavigate(({from}) => {
 
 // Fetch shop data when the component mounts
 onMount(() => {
-    console.log('Page loaded');
+    try {
+      user = JSON.parse(localStorage.getItem('user')) || null;
+    } catch (error) {
+      user = undefined;
+    }
+
     // Subscribe to $page to react to route changes
     const unsubscribe = page.subscribe(async ($page) => {
         const params = $page.params;
@@ -158,12 +164,14 @@ const copyLink = () => {
                     >
                         Terug
                     </a>
+                    {#if user.shopId && user.shopId === shop.id}
                     <a
                         href="/shops/{$page.params.id}/edit"
                         class="bg-orange-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-orange-600 transition"
                     >
                         Bewerken
                     </a>
+                    {/if}
                 </div>
             </div>
         {/if}

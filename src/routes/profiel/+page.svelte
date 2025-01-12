@@ -92,7 +92,8 @@
                     <div class="bg-gray-200 rounded-full w-full p-2 mb-2">{shop.location.city}</div>
                 </div>
                 <button class="bg-green-500 rounded-lg text-white p-2 mt-2" on:click={openModal}>Bestel QR-Kaartjes</button>
-                <a href="/shops/{shop.id}/edit"><button class="bg-blue-500 rounded-lg text-white p-2 mt-2">Bewerk Winkel</button></a>
+                <a href="/shops/{shop.id}"><button class="bg-blue-500 rounded-lg text-white p-2 mt-2">Bekijk Winkel</button></a>
+                <a href="/shops/{shop.id}/edit"><button class="bg-yellow-500 rounded-lg text-white p-2 mt-2">Bewerk Winkel</button></a>
             </div>
             {/if}
         </div>
