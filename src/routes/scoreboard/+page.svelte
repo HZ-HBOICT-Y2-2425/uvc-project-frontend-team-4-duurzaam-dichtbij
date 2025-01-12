@@ -10,7 +10,7 @@
         const storedUsers = localStorage.getItem('userList');
         if (storedUsers) {
             users = JSON.parse(storedUsers);
-            sortedUsers = [...users].sort((a, b) => b.reduction - a.reduction);
+            sortedUsers = [...users].sort((a, b) => (b.level*500 + b.reduction) - (a.level * 500 + a.reduction));
         }
     });
 </script>
@@ -32,7 +32,7 @@
                         <tr class={index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}>
                             <td class="border px-4 py-2">{index + 1}</td>
                             <td class="border px-4 py-2">{user.name}</td>
-                            <td class="border px-4 py-2">{user.reduction} kg</td>
+                            <td class="border px-4 py-2">{(user.level * 500) + user.reduction} kg</td>
                         </tr>
                     {/each}
                 </tbody>
